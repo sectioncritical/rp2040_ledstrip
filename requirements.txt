@@ -1,0 +1,1 @@
+git+https://github.com/dhylands/rshell.git@b87878c01aa02d6cd871ff4666983dee5584af16

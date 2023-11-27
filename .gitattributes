@@ -1,0 +1,8 @@
+* text=auto
+
+Makefile text
+*.py text diff=python
+
+*.md text diff=markdown
+*.txt text
+
