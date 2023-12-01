@@ -20,6 +20,9 @@ import cmdparser
 
 from adafruit_neopxl8 import NeoPxl8
 from adafruit_led_animation.color import RED, GREEN, BLUE, WHITE
+from adafruit_led_animation.animation.solid import Solid
+from adafruit_led_animation.animation.pulse import Pulse
+from adafruit_led_animation.animation.chase import Chase
 
 start_gpio = board.D2
 num_strands = 2
@@ -28,6 +31,7 @@ total_pix = num_strands * pix_per_strand
 brightness=1
 stride = 144
 pulselen = 1
+
 
 COLORON = (15, 0, 0)
 COLOROFF = (0, 0, 0)
@@ -46,7 +50,40 @@ def anim_off(cmdargs):
     for idx in range(total_pix):
         pxl8[idx] = COLOROFF
     pxl8.show()
-    time.sleep(0.1)
+    return None
+
+def anim_idle(cmdargs):
+    if len(cmdargs) == 2:
+        # TODO come up with uniform way to handle errors like this
+        try:
+            level = int(cmdargs[1])
+        except ValueError:
+            level = 0
+        if level == 0:
+            solid = Solid(pxl8, color=(0, 0, 8))
+            return solid
+        elif level == 1:
+            pulse = Pulse(pxl8, speed=0.01, color=(0,8,15), period=5)
+            return pulse
+        elif level == 2:
+            pulse = Pulse(pxl8, speed=0.01, color=(8,0,15), period=3)
+            return pulse
+        elif level == 3:
+            pulse = Pulse(pxl8, speed=0.01, color=(8,8,15), period=1)
+            return pulse
+    return None
+
+def anim_rpm(cmdargs):
+    try:
+        level = int(cmdargs[1])
+    except ValueError:
+        level = 0
+    if level == 0:
+        speed = 1
+    else:
+        speed = 1 / level
+    chase = Chase(pxl8, speed=speed, color=(8,0,0), size=10, spacing=20)
+    return chase
 
 def cmd_help(cmdargs):
     uart_print("\nCommands")
@@ -54,25 +91,33 @@ def cmd_help(cmdargs):
     for key, val in cmd_dict.items():
         uart_print(f"{key:<8}: {val[1]}")
     uart_print("")
+    return None
 
 cmd_dict = {
     "help": (cmd_help, "show list of commands"),
-    "off": (anim_off, "stop animations")
+    "off": (anim_off, "stop animations"),
+    "idle": (anim_idle, "idle mode (0-3)"),
+    "rpm": (anim_rpm, "rpm mode (1-100)")
     }
 
 errmsg = bytes("$ERR\n", 'utf-8')
 okmsg = bytes("$OK\n", 'utf-8')
 
+active_animation = None
+
 def run_command(cmdargs):
+    global active_animation
+    uart_print("run_command()" + str(cmdargs))
     if cmdargs[0] in cmd_dict:
         cmdfn = cmd_dict[cmdargs[0]][0]
-        cmdfn(cmdargs)
+        active_animation = cmdfn(cmdargs)
         uart.write(okmsg)
     else:
         uart.write(errmsg)
 
 def run_animation():
-    pass
+    if active_animation:
+        active_animation.animate()
 
 # command format
 # ascii string
