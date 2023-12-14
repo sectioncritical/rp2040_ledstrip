@@ -18,6 +18,10 @@ This project uses the
 [LICENSE file](LICENSE.md) for actual license text. Basically, you can do
 whatever you want with this project but I am not responsible for anything.
 
+Documents
+---------
+Some preliminary documentation can be found in the [`docs`](docs/) directory.
+
 TODO
 ----
 This README should be filled out with docs, usage, etc sections.
