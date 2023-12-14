@@ -20,10 +20,11 @@ import usb_cdc
 import cmdparser
 
 from adafruit_neopxl8 import NeoPxl8
-from adafruit_led_animation.color import RED, GREEN, BLUE, WHITE
+from adafruit_led_animation.color import RED, GREEN, BLUE, WHITE, BLACK
 from adafruit_led_animation.animation.solid import Solid
 from adafruit_led_animation.animation.pulse import Pulse
 from adafruit_led_animation.animation.chase import Chase
+from adafruit_led_animation.animation.blink import Blink
 
 start_gpio = board.D2
 num_strands = 2
@@ -31,11 +32,7 @@ pix_per_strand = 144
 total_pix = num_strands * pix_per_strand
 brightness=1
 stride = 144
-pulselen = 1
 
-
-COLORON = (15, 0, 0)
-COLOROFF = (0, 0, 0)
 
 pxl8 = NeoPxl8(start_gpio, total_pix, num_strands=num_strands,
                brightness=brightness, auto_write=False)
@@ -63,7 +60,7 @@ def ser_read():
 # animation to turn everything off
 def anim_off(cmdargs):
     for idx in range(total_pix):
-        pxl8[idx] = COLOROFF
+        pxl8[idx] = BLACK
     pxl8.show()
     return None
 
@@ -100,6 +97,37 @@ def anim_rpm(cmdargs):
     chase = Chase(pxl8, speed=speed, color=(8,0,0), size=10, spacing=20)
     return chase
 
+def anim_brake(cmdargs):
+    if len(cmdargs) == 2:
+        try:
+            level = int(cmdargs[1])
+        except ValueError:
+            level = 0
+        if level == 0:
+            solid = Solid(pxl8, color=(15, 0, 0))
+            return solid
+        elif level == 1:
+            blink = Blink(pxl8, speed=0.1, color=(15, 0, 0))
+            return blink
+    return None
+
+def anim_reverse(cmdargs):
+    if len(cmdargs) == 2:
+        try:
+            level = int(cmdargs[1])
+        except ValueError:
+            level = 0
+        if level == 0:
+            solid = Solid(pxl8, color=(15, 15, 15))
+            return solid
+        elif level == 1:
+            blink = Blink(pxl8, speed=0.5, color=(15, 15, 15))
+            return blink
+    return None
+
+def anim_turn(cmdargs):
+    return anim_off(cmdargs)
+
 def cmd_help(cmdargs):
     ser_writeln("\nCommands")
     ser_writeln("--------")
@@ -111,8 +139,11 @@ def cmd_help(cmdargs):
 cmd_dict = {
     "help": (cmd_help, "show list of commands"),
     "off": (anim_off, "stop animations"),
-    "idle": (anim_idle, "idle mode (0-3)"),
-    "rpm": (anim_rpm, "rpm mode (1-100)")
+    "idle": (anim_idle, "idle mode (pulse rate 0-3)"),
+    "rpm": (anim_rpm, "rpm mode (rate 1-100)"),
+    "brake": (anim_brake, "brake (0-solid, 1-flash)"),
+    "reverse": (anim_reverse, "reverse lights (0-solid, 1-blink)"),
+    "turn": (anim_turn, "turn signal")
     }
 
 errmsg = "$ERR"
