@@ -75,7 +75,7 @@ class CmdParser():
 
     # INTERNAL METHOD
     # break apart the command line and return args as strings
-    # cmdline is bytes-like
+    # cmdline is string
     # should be string beginning with '$' and ending with '\n'
     # contents should be comma separated list of args, no spaces
     # expects only ascii input
@@ -88,10 +88,10 @@ class CmdParser():
         stopch = cmdline[-1]
 
         # if input is properly framed
-        if startch == ord('$') and stopch == ord('\n'):
+        if startch == '$' and stopch == '\n':
 
             # convert it to string and lower case
-            cmdstr = cmdline.decode("ascii").lower()
+            cmdstr = cmdline.lower()
             cmdstr = cmdstr[1:-1]  # remove terminators
             cmdargs = cmdstr.split(',')
             # return the parsed input args
@@ -100,32 +100,32 @@ class CmdParser():
         return []  # bad start/stop chars, return error
 
     # INTERNAL METHOD
-    # inbuf is bytes-like one or more characters
-    # returns None or bytearray buffer containing properly framed command
+    # inbuf is string one or more characters
+    # returns None or string containing properly framed command
     # this method is separated from process_input() to make it easier to test
     def assemble_cmd(self, inbuf):
         # process all incoming characters
         for ch in inbuf:
             # if it is a $ that is start of a command
-            if ch == ord('$'):
-                self._buf = bytearray([ch])
+            if ch == '$':
+                self._buf = ch
             # only process anything else if there is already an ongoing input
             # IOW ignore anything that comes in not preceeded with a $
             elif self._buf:
                 # if line terminator comes in then attempt to parse the
                 # command line, return result to caller
-                if ch == ord('\n') or ch == ord('\r'):
-                    self._buf.append(ord('\n'))
+                if ch == '\n' or ch == '\r':
+                    self._buf += '\n'
                     ret = self._buf
                     self._buf = None  # reset the input buffer
                     return ret
                 # any other character just store it
                 else:
-                    self._buf.append(ch)
+                    self._buf += ch
         return None
 
     # PUBLIC METHOD
-    # inbuf is bytes-like one or more characters
+    # inbuf is string, one or more characters
     # returns None or list of command line components as strings
     # empty list means there was an error
     def process_input(self, inbuf):

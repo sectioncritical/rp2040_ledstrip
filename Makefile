@@ -74,6 +74,7 @@ deploy: #venv
 # assumes target board is mounted to a certain location
 .PHONY: deploym
 deploym:
+	cp boot.py /Volumes/CIRCUITPY/.
 	cp code.py /Volumes/CIRCUITPY/.
 	cp cmdparser.py /Volumes/CIRCUITPY/.
 

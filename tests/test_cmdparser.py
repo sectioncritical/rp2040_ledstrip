@@ -33,7 +33,7 @@ class TestProcessInput(unittest.TestCase):
         self.assertTrue(self.cp)
 
     def test_nominal(self):
-        b = bytes("$foo,bar\n", "ascii")
+        b = "$foo,bar\n"
         result = self.cp.process_input(b)
         self.assertIsInstance(result, list)
         self.assertEqual(2, len(result))
@@ -41,13 +41,13 @@ class TestProcessInput(unittest.TestCase):
         self.assertEqual("bar", result[1])
 
     def test_pieces(self):
-        b = bytes("$fo", "ascii")
+        b = "$fo"
         result = self.cp.process_input(b)
         self.assertIsNone(result)
-        b = bytes("o,ba", "ascii")
+        b = "o,ba"
         result = self.cp.process_input(b)
         self.assertIsNone(result)
-        b = bytes("r\n", "ascii")
+        b = "r\n"
         result = self.cp.process_input(b)
         self.assertIsInstance(result, list)
         self.assertEqual(2, len(result))
@@ -61,7 +61,7 @@ class TestCmdParserGood(unittest.TestCase):
         self.assertTrue(self.cp)
 
     def test_2args(self):
-        b = bytes("$arg1,arg2\n", 'ascii')
+        b = "$arg1,arg2\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(2, len(result))
@@ -69,14 +69,14 @@ class TestCmdParserGood(unittest.TestCase):
         self.assertEqual("arg2", result[1])
 
     def test_1arg(self):
-        b = bytearray("$foobar\n", "ascii")
+        b = "$foobar\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(1, len(result))
         self.assertEqual("foobar", result[0])
 
     def test_3args(self):
-        b = bytes("$foo,bar,baz\n", 'ascii')
+        b = "$foo,bar,baz\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(3, len(result))
@@ -87,14 +87,14 @@ class TestCmdParserGood(unittest.TestCase):
     # a command line with no actual arguments does not return an empty list
     # it returns a list with one item which is an empty string
     def test_0arg(self):
-        b = bytearray("$\n", "ascii")
+        b = "$\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(1, len(result))
         self.assertEqual("", result[0])
 
     def test_lower_case(self):
-        b = bytes("$FOO,bar\n", 'ascii')
+        b = "$FOO,bar\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(2, len(result))
@@ -108,25 +108,25 @@ class TestCmdParserBad(unittest.TestCase):
         self.assertTrue(self.cp)
 
     def test_bad_leading(self):
-        b = bytes("foo,bar\n", "ascii")
+        b = "foo,bar\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(0, len(result))
 
     def test_bad_trailing(self):
-        b = bytes("$foo,bar", "ascii")
+        b = "$foo,bar"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(0, len(result))
 
     def test_garbage(self):
-        b = bytes("ishdk57e9ksjh(*&)(&*alskjs", "ascii")
+        b = "ishdk57e9ksjh(*&)(&*alskjs"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(0, len(result))
 
     def test_bad_delimiter(self):
-        b = bytes("$foo.bar\n", "ascii")
+        b = "$foo.bar\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(1, len(result))
@@ -134,7 +134,7 @@ class TestCmdParserBad(unittest.TestCase):
 
     # verify empty parm before comma is okay
     def test_empty_first_parm(self):
-        b = bytes("$,bar\n", "ascii")
+        b = "$,bar\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(2, len(result))
@@ -143,7 +143,7 @@ class TestCmdParserBad(unittest.TestCase):
 
     # verify empty parm after comma is okay
     def test_empty_second_parm(self):
-        b = bytes("$foo,\n", "ascii")
+        b = "$foo,\n"
         result = self.cp.parse_cmd(b)
         self.assertIsInstance(result, list)
         self.assertEqual(2, len(result))
@@ -159,81 +159,83 @@ class TestAssembleCmd(unittest.TestCase):
         self.assertIsNone(self.cp._buf)
 
     def test_complete_nominal(self):
-        b = bytes("$foo,bar\n", "ascii")
+        b = "$foo,bar\n"
         result = self.cp.assemble_cmd(b)
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
 
     # check that it can handle bytearray as well as bytes
+    # this test not strictly needed now since change to strings from bytes
+    # but keep anyway - doesnt hurt
     def test_complete_nominal_bytearray(self):
-        b = bytearray("$foo,bar\n", "ascii")
+        b = "$foo,bar\n"
         result = self.cp.assemble_cmd(b)
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
 
     def test_ignore_trailing(self):
-        b = bytes("$foo,bar\n$baz,qux", "ascii")
+        b = "$foo,bar\n$baz,qux"
         result = self.cp.assemble_cmd(b)
         # verify the input was framed properly
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
         # verify that more input is processed correctly without the
         # stray bytes from the previous input
-        b = bytes("$foo,bar\n", "ascii")
+        b = "$foo,bar\n"
         result = self.cp.assemble_cmd(b)
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
 
     def test_ignore_leading(self):
-        b = bytes("qwerty$foo,bar\n", "ascii")
+        b = "qwerty$foo,bar\n"
         result = self.cp.assemble_cmd(b)
         # verify leading bytes are ignored
         # and valid input was framed properly
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
 
     # check that an empty input does not cause a problem
     # however, we do not test input of None or non-bytes type because
     # the function does not check for that
     # I assume that the caller will not pass invalid types
     def test_empty_input(self):
-        b = bytes()
+        b = ""
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
 
     # verify correct result when command is passed in more than one piece
     def test_two_pieces(self):
-        b = bytes("$foo,", "ascii")
+        b = "$foo,"
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
-        b = bytes("bar\n", "ascii")
+        b = "bar\n"
         result = self.cp.assemble_cmd(b)
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
 
     # check that it can be terminated with \r instead of \n
     def test_cr_instead_of_newline(self):
-        b = bytes("$foo,bar\r", "ascii")
+        b = "$foo,bar\r"
         result = self.cp.assemble_cmd(b)
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
 
     # verify CRLF terminator does not cause a problem
     def test_crlf(self):
-        b = bytes("$foo,bar\r\n", "ascii")
+        b = "$foo,bar\r\n"
         result = self.cp.assemble_cmd(b)
         # verify the input was framed properly
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
         # verify that more input is processed correctly without the
         # stray bytes from the previous input
-        b = bytes("$baz,qux\n", "ascii")
+        b = "$baz,qux\n"
         result = self.cp.assemble_cmd(b)
-        self.assertEqual(bytes("$baz,qux\n", "ascii"), result)
+        self.assertEqual("$baz,qux\n", result)
 
     # verify LFCR terminator does not cause a problem
     def test_lfcr(self):
-        b = bytes("$foo,bar\n\r", "ascii")
+        b = "$foo,bar\n\r"
         result = self.cp.assemble_cmd(b)
         # verify the input was framed properly
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
         # verify that more input is processed correctly without the
         # stray bytes from the previous input
-        b = bytes("$baz,qux\n", "ascii")
+        b = "$baz,qux\n"
         result = self.cp.assemble_cmd(b)
-        self.assertEqual(bytes("$baz,qux\n", "ascii"), result)
+        self.assertEqual("$baz,qux\n", result)
 
     # detailed check of internals to make sure method works the way we
     # think it does
@@ -242,42 +244,42 @@ class TestAssembleCmd(unittest.TestCase):
         # internal buf should be None
         self.assertIsNone(self.cp._buf)
         # passing in anything prior to $ buf should remain None
-        b = bytes("plugh", "ascii")
+        b = "plugh"
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
         self.assertIsNone(self.cp._buf)
-        b = bytes("plover", "ascii")
+        b = "plover"
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
         self.assertIsNone(self.cp._buf)
         # passing in CR or LF does nothing
-        b = bytes("\r", "ascii")
+        b = "\r"
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
         self.assertIsNone(self.cp._buf)
-        b = bytes("\n", "ascii")
+        b = "\n"
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
         self.assertIsNone(self.cp._buf)
         # starting with $ inits the buffer
-        b = bytes("$", "ascii")
+        b = "$"
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
-        self.assertEqual(bytes("$", "ascii"), self.cp._buf)
+        self.assertEqual("$", self.cp._buf)
         # adding stuff adds to the buffer
-        b = bytes("foo,b", "ascii")
+        b = "foo,b"
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
-        self.assertEqual(bytes("$foo,b", "ascii"), self.cp._buf)
+        self.assertEqual("$foo,b", self.cp._buf)
         # add a little more
-        b = bytes("ar", "ascii")
+        b = "ar"
         result = self.cp.assemble_cmd(b)
         self.assertIsNone(result)
-        self.assertEqual(bytes("$foo,bar", "ascii"), self.cp._buf)
+        self.assertEqual("$foo,bar", self.cp._buf)
         # adding that last \n returns result and resets buffer
-        b = bytes("\n", "ascii")
+        b = "\n"
         result = self.cp.assemble_cmd(b)
-        self.assertEqual(bytes("$foo,bar\n", "ascii"), result)
+        self.assertEqual("$foo,bar\n", result)
         self.assertIsNone(self.cp._buf)
 
 

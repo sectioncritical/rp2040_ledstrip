@@ -14,7 +14,8 @@
 # PERFORMANCE OF THIS SOFTWARE.
 
 import board
-from busio import UART
+import usb_cdc
+#from busio import UART
 
 import cmdparser
 
@@ -39,11 +40,25 @@ COLOROFF = (0, 0, 0)
 pxl8 = NeoPxl8(start_gpio, total_pix, num_strands=num_strands,
                brightness=brightness, auto_write=False)
 
-uart = UART(tx=board.TX, rx=board.RX, baudrate=115200, timeout=0)
+#uart = UART(tx=board.TX, rx=board.RX, baudrate=115200, timeout=0)
 
-# take a string, append CRLF and send to uart
-def uart_print(printstr):
-    uart.write((printstr+"\r\n").encode("utf-8"))
+# from input string, write to serial comm channel appending CRLF
+def ser_write(printstr):
+    # uart.write((printstr+"\r\n").encode("utf-8"))
+    usb_cdc.data.write(bytes(printstr, "ascii"))
+
+# write a line to serial console with CRLF termination
+def ser_writeln(printstr):
+    ser_write(printstr)
+    ser_write("\r\n")
+
+# return characters from serial comm channel or None
+def ser_read():
+    available = usb_cdc.data.in_waiting
+    if available:
+        input = usb_cdc.data.read(available)
+        return input.decode("ascii")
+    return None
 
 # animation to turn everything off
 def anim_off(cmdargs):
@@ -86,11 +101,11 @@ def anim_rpm(cmdargs):
     return chase
 
 def cmd_help(cmdargs):
-    uart_print("\nCommands")
-    uart_print("--------")
+    ser_writeln("\nCommands")
+    ser_writeln("--------")
     for key, val in cmd_dict.items():
-        uart_print(f"{key:<8}: {val[1]}")
-    uart_print("")
+        ser_writeln(f"{key:<8}: {val[1]}")
+    ser_writeln("")
     return None
 
 cmd_dict = {
@@ -100,20 +115,20 @@ cmd_dict = {
     "rpm": (anim_rpm, "rpm mode (1-100)")
     }
 
-errmsg = bytes("$ERR\n", 'utf-8')
-okmsg = bytes("$OK\n", 'utf-8')
+errmsg = "$ERR"
+okmsg = "$OK"
 
 active_animation = None
 
 def run_command(cmdargs):
     global active_animation
-    uart_print("run_command()" + str(cmdargs))
+    ser_writeln("run_command()" + str(cmdargs))
     if cmdargs[0] in cmd_dict:
         cmdfn = cmd_dict[cmdargs[0]][0]
         active_animation = cmdfn(cmdargs)
-        uart.write(okmsg)
+        ser_writeln(okmsg)
     else:
-        uart.write(errmsg)
+        ser_writeln(errmsg)
 
 def run_animation():
     if active_animation:
@@ -132,15 +147,14 @@ def run_animation():
 # if any return chars appear '\r' they are discarded
 
 
-uart_print("\nFlashy Starting ...\n")
+ser_writeln("\nFlashy Starting ...\n")
 
 cp = cmdparser.CmdParser()
 
 while True:
-    in_available = uart.in_waiting
-    if in_available:
-        incoming = uart.read(in_available)
-        uart.write(incoming)  # echo back to console
+    incoming = ser_read()
+    if incoming:
+        ser_write(incoming)  # echo back to console
         cmdargs = cp.process_input(incoming)
         if cmdargs:
             run_command(cmdargs)
