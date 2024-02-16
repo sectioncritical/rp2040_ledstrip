@@ -26,12 +26,12 @@ from adafruit_led_animation.animation.pulse import Pulse
 from adafruit_led_animation.animation.chase import Chase
 from adafruit_led_animation.animation.blink import Blink
 
-start_gpio = board.D2
-num_strands = 2
-pix_per_strand = 144
+start_gpio = board.NEOPIXEL0
+num_strands = 1
+pix_per_strand = 3*144
 total_pix = num_strands * pix_per_strand
 brightness=1
-stride = 144
+#stride = 144
 
 
 pxl8 = NeoPxl8(start_gpio, total_pix, num_strands=num_strands,
