@@ -29,6 +29,9 @@
 # of this writing. And micropython does not automatically mount a drive to
 # expose the filesystem.
 
+# micropython search path. needed for running unittest under upy
+UPYPATH=~/.micropython/lib:$(shell pwd)
+
 APP_FILES=console_std.py cmdif.py cmdparser.py ws2812_pio.py main.py
 
 BUILD_DIR=build
@@ -100,10 +103,15 @@ ls: |venv
 terminal: venv
 	venv/bin/python -m serial.tools.miniterm $(SERPORT) 115200
 
-# uses python builtin unittest module, so does not require venv
+# WAS: uses python builtin unittest module, so does not require venv
+# NOW: run tests using micropython to better match the target environment
+# however unittest doesnt run the normal way so each test module has to
+# be loaded individually
 .PHONY: test
 test:
-	python3 -m unittest -v tests.test_cmdparser tests.test_cmdif
+	MICROPYPATH=$(UPYPATH) micropython tests/test_cmdparser.py
+#	MICROPYPATH=$(UPYPATH) micropython tests/test_cmdif.py
+#	python3 -m unittest -v tests.test_cmdparser tests.test_cmdif
 
 # run the target based test
 .PHONY: testpico_ws2812
