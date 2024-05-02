@@ -91,7 +91,8 @@ class CmdParser():
         if startch == '$' and stopch == '\n':
 
             # convert it to string and lower case
-            cmdstr = cmdline.lower()
+            #cmdstr = cmdline.lower()
+            cmdstr = cmdline
             cmdstr = cmdstr[1:-1]  # remove terminators
             cmdargs = cmdstr.split(',')
             # return the parsed input args

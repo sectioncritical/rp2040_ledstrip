@@ -32,7 +32,7 @@
 # micropython search path. needed for running unittest under upy
 UPYPATH=~/.micropython/lib:$(shell pwd)
 
-APP_FILES=console_std.py cmdif.py cmdparser.py ws2812_pio.py main.py
+APP_FILES=console_std.py cmdclasses.py cmdtemplate.py cmdif.py cmdparser.py ws2812_pio.py main.py ledmeter.py
 
 BUILD_DIR=build
 
@@ -110,7 +110,7 @@ terminal: venv
 .PHONY: test
 test:
 	MICROPYPATH=$(UPYPATH) micropython tests/test_cmdparser.py
-#	MICROPYPATH=$(UPYPATH) micropython tests/test_cmdif.py
+	MICROPYPATH=$(UPYPATH) micropython tests/test_cmdif.py
 #	python3 -m unittest -v tests.test_cmdparser tests.test_cmdif
 
 # run the target based test

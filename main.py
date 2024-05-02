@@ -1,24 +1,28 @@
 
 import array
 import cmdif
-import ws2812_pio as wspio
+
+try:
+    import ws2812_pio as wspio
+except ImportError:
+    from tests import ws2812_test as wspio
+
 
 ws = wspio.WS2812(0, 16)
 pixels = array.array("I", [0 for _ in range(144*3)])
+ci = cmdif.CmdInterface(framebuf=pixels)
 
-def meter(param_list, config_list):
-    global pixels
-    dot0 = config_list[0]
-    numdots = config_list[1]
-    pct = int(param_list[1])
-    litdots = (numdots * pct) // 100
-    for idx in range(litdots):
-        red = (64 * (numdots - idx)) // numdots
-        green = (64 * idx) // numdots
-        pixels[dot0 + idx] = (green << 16) + (red << 8)
-    for idx in range(litdots, numdots):
-        pixels[dot0 + idx] = 0
-    ws.show(pixels)
+# this is the execution loop
+# can add return/exit conditions here
+# this is where display update should be called
+# right now delay is handled in command update method but consider
+# putting it here instead
+# also need to add code to allow for repeated calls to update when a
+# pattern command needs to keep running
+while True:
+    ci.run()
+
+"""
 
 def range(param_list, config_list):
     global pixels
@@ -34,9 +38,4 @@ def range(param_list, config_list):
         pixels[dot0+idx] = color
     ws.show(pixels)
 
-meter_config = [0, 40]
-
-ci = cmdif.CmdInterface()
-ci.add_cmd("meter", meter, "bar meter red to green (0-100)", meter_config)
-ci.add_cmd("range", range, "manual set range of LEDs (start,stop,r,g,b)", [])
-ci.run()
+"""
