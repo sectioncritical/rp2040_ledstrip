@@ -19,8 +19,10 @@ ci = cmdif.CmdInterface(framebuf=pixels)
 # putting it here instead
 # also need to add code to allow for repeated calls to update when a
 # pattern command needs to keep running
+# consider passing pixels to run
 while True:
     ci.run()
+    ws.show(pixels)
 
 """
 

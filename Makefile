@@ -32,7 +32,7 @@
 # micropython search path. needed for running unittest under upy
 UPYPATH=~/.micropython/lib:$(shell pwd)
 
-APP_FILES=console_std.py cmdclasses.py cmdtemplate.py cmdif.py cmdparser.py ws2812_pio.py main.py ledmeter.py
+APP_FILES=console_std.py cmdclasses.py cmdtemplate.py cmdif.py cmdparser.py ws2812_pio.py main.py ledmeter.py ledrange.py
 
 BUILD_DIR=build
 

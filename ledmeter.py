@@ -6,11 +6,11 @@ class LedMeter(CommandTemplate):
     cfgstr = "start,stop..."
 
     def config(self, cfglist):
-        self._start = cfglist[2]
-        self._stop = cfglist[3]
+        self._start = int(cfglist[2])
+        self._stop = int(cfglist[3])
 
     def render(self, parmlist, framebuf):
-        pix = pixarray
+        pix = framebuf
         dot0 = self._start
         numdots = self._stop - self._start
         pct = int(parmlist[1])
