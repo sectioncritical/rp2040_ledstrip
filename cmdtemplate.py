@@ -1,6 +1,4 @@
 
-from time import sleep_us
-
 class CommandTemplate():
     #
     # brief help string for the command
@@ -27,38 +25,8 @@ class CommandTemplate():
     # framebuf - implementation specific display device but usually
     #           a pixel array
     #
+    # returns: None - no further calls needed
+    #          0 - call again immediately to run pattern
+    #          >0 - microseconds to delay before calling again
     def render(self, parmlist, framebuf):
-        pass
-
-    #
-    # parmlist - list-like of strings with run-time parameters
-    # framebuf - implementation specific display device but usually
-    #           a pixel array
-    # returns True if it should be called again, False if one-shot
-    #
-    def update(self, parmlist=None, framebuf=None):
-        self.render(parmlist, framebuf)
-        if self._delay is None:
-            return False
-        if self._delay != 0:
-            time.sleep_us(self._delay)
-        return True
-
-"""
-class MeterPattern(LedPattern):
-    def render(self, parms):
-        pix = self._pix
-        dot0 = self._dot0
-        numdots = self._dots
-        pct = int(parms[0])
-        litdots = (numdots * pct) // 100
-        for idx in range(litdots):
-            # calculate percentage of red and green
-            # for low idx it is mostly red and idx gets bigger
-            # the red decreases and the green increases
-            red = (64 * (numdots - idx)) // numdots
-            green = (64 * idx) // numdots
-            pix[dot0 + idx] = (green << 16) + (red << 8)
-        for idx in range(litdots, numdots):
-            pixels[dot0 + idx] = 0
-"""
+        return None

@@ -93,13 +93,14 @@ class TestCmdParserGood(unittest.TestCase):
         self.assertEqual(1, len(result))
         self.assertEqual("", result[0])
 
-    def test_lower_case(self):
-        b = "$FOO,bar\n"
-        result = self.cp.parse_cmd(b)
-        self.assertIsInstance(result, list)
-        self.assertEqual(2, len(result))
-        self.assertEqual("foo", result[0])
-        self.assertEqual("bar", result[1])
+    # change to design made it case sensitive so dont do this test any more
+    ##def test_lower_case(self):
+    ##    b = "$FOO,bar\n"
+    ##    result = self.cp.parse_cmd(b)
+    ##    self.assertIsInstance(result, list)
+    ##    self.assertEqual(2, len(result))
+    ##    self.assertEqual("foo", result[0])
+    ##    self.assertEqual("bar", result[1])
 
 class TestCmdParserBad(unittest.TestCase):
 

@@ -21,23 +21,7 @@ ci = cmdif.CmdInterface(framebuf=pixels)
 # pattern command needs to keep running
 # consider passing pixels to run
 while True:
-    ci.run()
-    ws.show(pixels)
+    repaint = ci.run()
+    if repaint:
+        ws.show(pixels)
 
-"""
-
-def range(param_list, config_list):
-    global pixels
-    dot0 = int(param_list[1])
-    numdots = int(param_list[2])
-    red = int(param_list[3])
-    green = int(param_list[4])
-    blue = int(param_list[5])
-    color = green << 16
-    color += red << 8
-    color += blue
-    for idx in range(numdots):
-        pixels[dot0+idx] = color
-    ws.show(pixels)
-
-"""

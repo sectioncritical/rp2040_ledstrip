@@ -15,3 +15,4 @@ class LedRange(CommandTemplate):
         color += blue
         for idx in range(numdots):
             framebuf[dot0+idx] = color
+        return None     # no further calls needed

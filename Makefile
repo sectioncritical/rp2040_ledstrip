@@ -52,6 +52,7 @@ help:
 	@echo "deploy_mpy  - copy app files to target as mpy (requires mpy-cross)"
 	@echo "repl        - enter repl of target using rshell"
 	@echo "ls          - list files on target"
+	@echo "reset       - reset the target"
 	@echo ""
 	@echo "terminal    - open serial terminal using miniterm (SERPORT)"
 	@echo "              Current SERPORT=$(SERPORT)"
@@ -97,6 +98,10 @@ repl: |venv
 .PHONY: ls
 ls: |venv
 	venv/bin/mpremote ls
+
+.PHONY: reset
+reset: |venv
+	venv/bin/mpremote reset
 
 # make sure to set SERPORT to use terminal
 .PHONY: terminal

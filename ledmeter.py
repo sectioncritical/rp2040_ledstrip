@@ -24,3 +24,4 @@ class LedMeter(CommandTemplate):
             pix[dot0 + idx] = (green << 16) + (red << 8)
         for idx in range(litdots, numdots):
             pix[dot0 + idx] = 0
+        return None     # no further calls needed
