@@ -1,5 +1,8 @@
 # LED Mode Commands
 
+**There have been a lot of changes since this was written and it is all out
+of date. These docs will be updated once development is settled down.**
+
 This is some preliminary documentation about how the commands work and the
 description of different blink modes. A lot of things are TBD, especially the
 arrangement of the LED strips in the vehicle.

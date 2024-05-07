@@ -1,6 +1,9 @@
 Car LED Strip Controller
 ========================
 
+**This is work-in-progress and early development. Don't count on anything
+working or the docs being up to date.**
+
 This project is for controlling LED strips intended for use on a car. It
 expects to run on a Raspberry Pico RP2040 board, using CircuitPython. The
 prototyping hardware is the
