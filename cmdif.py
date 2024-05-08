@@ -83,6 +83,12 @@ class CmdInterface():
         self._cmds["help"] = CmdHelp(self._cmds)
         self._cmds["config"] = CmdConfig(self._cmds)
         self._cmds["add"] = CmdAdd(self)
+
+        # temporary additional commands
+        self._cmds["range"] = LedRange()
+        self._cmds["meter"] = LedMeter()
+        #
+
         self._cp = cmdparser.CmdParser()
         self._framebuf = framebuf
         self._cmdobj = None
