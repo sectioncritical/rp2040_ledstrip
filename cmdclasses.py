@@ -2,3 +2,4 @@
 
 from ledmeter import LedMeter
 from ledrange import LedRange
+from dualmeter import DualMeter
