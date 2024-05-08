@@ -87,6 +87,7 @@ class CmdInterface():
         # temporary additional commands
         self._cmds["range"] = LedRange()
         self._cmds["meter"] = LedMeter()
+        self._cmds["2meter"] = DualMeter()
         #
 
         self._cp = cmdparser.CmdParser()
