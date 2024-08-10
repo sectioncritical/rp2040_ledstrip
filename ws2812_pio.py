@@ -143,7 +143,7 @@ class WS2812():
             sm.put(pix)
 
         now = time.ticks_us()
-        delay = time.ticks_add(now, 100)
+        delay = time.ticks_add(now, 500)
 
         while time.ticks_diff(now, delay) < 0:
             now = time.ticks_us()
