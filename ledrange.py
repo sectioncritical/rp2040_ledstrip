@@ -15,4 +15,4 @@ class LedRange(CommandTemplate):
         color += blue
         for idx in range(numdots):
             framebuf[dot0+idx] = color
-        return None     # no further calls needed
+        return -1  # no further calls needed, dont repaint

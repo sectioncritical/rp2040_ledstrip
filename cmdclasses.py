@@ -2,4 +2,5 @@
 
 from ledmeter import LedMeter
 from ledrange import LedRange
+from ledpaint import LedPaint
 from dualmeter import DualMeter

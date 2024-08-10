@@ -88,6 +88,7 @@ class CmdInterface():
         self._cmds["range"] = LedRange()
         self._cmds["meter"] = LedMeter()
         self._cmds["2meter"] = DualMeter()
+        self._cmds["paint"] = LedPaint()
         #
 
         self._cp = cmdparser.CmdParser()
@@ -149,6 +150,11 @@ class CmdInterface():
                     self._cmdobj = None  # doesnt need to run again
                 elif delay == 0:
                     self._sched = now    # run again immediately
+                elif delay < 0:
+                    # command doesnt want repaint
+                    # treat as None, but return false to not repaint
+                    self._cmdobj = None  # dont run again
+                    return False  # dont repaint
                 else:
                     # schedule next run time
                     self._sched = time.ticks_add(now, delay)
