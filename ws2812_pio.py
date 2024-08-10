@@ -142,3 +142,5 @@ class WS2812():
         for pix in pixarray:
             sm.put(pix)
 
+        while sm.tx_fifo() > 0:
+            continue
