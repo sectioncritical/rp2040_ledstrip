@@ -142,3 +142,8 @@ class WS2812():
         for pix in pixarray:
             sm.put(pix)
 
+        now = time.ticks_us()
+        delay = time.ticks_add(now, 100)
+
+        while time.ticks_diff(now, delay) < 0:
+            now = time.ticks_us()
