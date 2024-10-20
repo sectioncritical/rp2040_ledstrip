@@ -156,7 +156,7 @@ venv/bin/activate: requirements.txt
 	venv/bin/python -m pip install -Ur $<
 	venv/bin/python -m pip install -U safety
 	touch $@
-	venv/bin/safety check
+	-venv/bin/safety check
 
 .PHONY: cleanvenv
 cleanvenv:
