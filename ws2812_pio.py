@@ -103,11 +103,24 @@ class WS2812():
 
     def __init__(self, smid, pin):
         """Class constructor for WS2812."""
+
+        # debug pin, if needed
+        #self.debug_pin = Pin(23, Pin.OUT)
+        #self.debug_pin.low()
+
+        # create the state machine
         ws_pin = Pin(pin, Pin.OUT)
         # 64 ns, divider is 8
         self._sm = rp2.StateMachine(smid, ws2812_shifter, freq=15625000,
                           set_base=ws_pin, out_base=ws_pin)
         self._sm.active(1)
+
+        # set up dma for state machine
+        # code snippets from: https://docs.micropython.org/en/latest/library/rp2.DMA.html
+        self._dma = rp2.DMA()
+        pio_num = 0 if smid < 4 else 1
+        dreq_idx = (pio_num << 3) + smid
+        self.dmactrl = self._dma.pack_ctrl(size=2, inc_write=False, treq_sel=dreq_idx)
 
     def shutdown(self):
         """Halt the state machine.
@@ -138,7 +151,14 @@ class WS2812():
         You can use a regular python list, but micropython also provides an
         ``array`` type that is a C-like array and that may be more efficient.
         """
-        sm = self._sm
-        for pix in pixarray:
-            sm.put(pix)
+        #self.debug_pin.high()
 
+        sm = self._sm
+        xfer_count = len(pixarray)
+        self._dma.config(read=pixarray, write=sm, count=xfer_count,
+                         ctrl=self.dmactrl, trigger=True)
+        while self._dma.active():
+            pass
+
+        #self.debug_pin.low()
+        #time.sleep_us(100)  # might need this to ensure frame timing gap
