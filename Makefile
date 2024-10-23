@@ -53,6 +53,7 @@ help:
 	@echo "repl        - enter repl of target using rshell"
 	@echo "ls          - list files on target"
 	@echo "reset       - reset the target"
+	@echo "bootloader  - put device in bootloader mode (for upython updating)"
 	@echo ""
 	@echo "terminal    - open serial terminal using miniterm (SERPORT)"
 	@echo "              Current SERPORT=$(SERPORT)"
@@ -102,6 +103,10 @@ ls: |venv
 .PHONY: reset
 reset: |venv
 	venv/bin/mpremote reset
+
+.PHONY: bootloader
+bootloader: |venv
+	venv/bin/mpremote bootloader
 
 # make sure to set SERPORT to use terminal
 .PHONY: terminal
