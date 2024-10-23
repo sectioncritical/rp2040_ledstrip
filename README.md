@@ -25,6 +25,10 @@ This project uses the
 [LICENSE file](LICENSE.md) for actual license text. Basically, you can do
 whatever you want with this project but I am not responsible for anything.
 
+Issue Tracking
+--------------
+See further down.
+
 Documents
 ---------
 Some preliminary documentation can be found in the [`docs`](docs/) directory.
@@ -135,3 +139,17 @@ brief instructions:
 * The target should immediately reboot and the mounted volume will disappear.
 * Within a few seconds the target should now be running the new version of
   MicroPython.
+
+Issue Tracking
+--------------
+For this issue I am using [git issue](https://github.com/dspinellis/git-issue).
+This is a portable way to track issues that is not dependent on Github, plus
+it is a command line tool.
+
+In case you want to see the issue repo, you must have git-issue installed. Once
+you have that you can:
+
+    git issue clone https://github.com/sectioncritical/issue-car_ledstrip.git
+
+It should clone the issues repo and then you can use `git issue` commands to
+view and interact with issues.
