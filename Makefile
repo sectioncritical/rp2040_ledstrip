@@ -29,12 +29,12 @@
 # of this writing. And micropython does not automatically mount a drive to
 # expose the filesystem.
 
-# micropython search path. needed for running unittest under upy
-UPYPATH=~/.micropython/lib:$(shell pwd)
-
 APP_FILES=console_std.py cmdclasses.py cmdtemplate.py cmdif.py cmdparser.py ws2812_pio.py main.py ledmeter.py ledrange.py
-
+SRC_DIR=ledstrip
 BUILD_DIR=build
+
+# micropython search path. needed for running unittest under upy
+UPYPATH=~/.micropython/lib:$(shell pwd)/$(SRC_DIR)
 
 all: help
 
@@ -77,8 +77,8 @@ boards: |venv
 	venv/bin/mpremote devs
 
 .PHONY: deploy
-deploy: $(APP_FILES) | venv
-	for f in $(APP_FILES); do venv/bin/mpremote cp $$f :$$f; done
+deploy: | venv
+	for f in $(APP_FILES); do venv/bin/mpremote cp $(SRC_DIR)/$$f :$$f; done
 
 $(BUILD_DIR):
 	mkdir $@
@@ -89,7 +89,7 @@ $(BUILD_DIR):
 deploy_mpy: $(APP_FILES) | venv $(BUILD_DIR)
 	for f in $(APP_FILES);                                                  \
 	do                                                                      \
-	    mpy-cross $$f -o $(BUILD_DIR)/$${f%.py}.mpy;                        \
+	    mpy-cross $(SRC_DIR)/$$f -o $(BUILD_DIR)/$${f%.py}.mpy;                        \
 	    venv/bin/mpremote cp $(BUILD_DIR)/$${f%.py}.mpy :                   \
 	done
 

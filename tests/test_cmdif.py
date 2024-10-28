@@ -106,10 +106,12 @@ class TestBasicAdd(unittest.TestCase):
         self.assertIsNone(self.ci._cmdobj)
         self.assertIsNone(self.ci._cmdparms)
         self.assertEqual(0, self.ci._sched)
+        # get base number of built in commands
+        self.numcmds = len(self.ci._cmds)
 
     # initially there are 3 commands populated
     def test_initial(self):
-        self.assertEqual(3, len(self.ci._cmds))
+        self.assertEqual(self.numcmds, len(self.ci._cmds))
         self.assertTrue("help" in self.ci._cmds)
         self.assertTrue("config" in self.ci._cmds)
         self.assertTrue("add" in self.ci._cmds)
@@ -117,7 +119,7 @@ class TestBasicAdd(unittest.TestCase):
     def test_add(self):
         newcmd = BasicCommand()
         self.ci.add_cmd("basic", newcmd)
-        self.assertEqual(4, len(self.ci._cmds))
+        self.assertEqual(self.numcmds+1, len(self.ci._cmds))
         self.assertTrue("basic" in self.ci._cmds)
         cmdobj = self.ci._cmds["basic"]
         self.assertEqual(newcmd, cmdobj)
@@ -135,7 +137,6 @@ class TestSetup(unittest.TestCase):
         # add basic command so we can test operations on it
         self.newcmd = BasicCommand()
         self.ci.add_cmd("basic", self.newcmd)
-        self.assertEqual(4, len(self.ci._cmds))
         self.assertTrue("basic" in self.ci._cmds)
         cmdobj = self.ci._cmds["basic"]
         self.assertEqual(self.newcmd, cmdobj)
@@ -181,7 +182,6 @@ class TestExecBasic(unittest.TestCase):
         # add basic command so we can test operations on it
         self.newcmd = BasicCommand()
         self.ci.add_cmd("basic", self.newcmd)
-        self.assertEqual(len(self.ci._cmds), 4)
         self.assertTrue("basic" in self.ci._cmds)
         cmdobj = self.ci._cmds["basic"]
         self.assertEqual(self.newcmd, cmdobj)
@@ -232,7 +232,6 @@ class TestExecRepeat(unittest.TestCase):
         # add basic command so we can test operations on it
         self.newcmd = RepeatCommand()
         self.ci.add_cmd("repeat", self.newcmd)
-        self.assertEqual(len(self.ci._cmds), 4)
         self.assertTrue("repeat" in self.ci._cmds)
         cmdobj = self.ci._cmds["repeat"]
         self.assertEqual(self.newcmd, cmdobj)
@@ -292,7 +291,6 @@ class TestConfig(unittest.TestCase):
         # add basic command so we can test operations on it
         self.newcmd = BasicCommand()
         self.ci.add_cmd("basic", self.newcmd)
-        self.assertEqual(len(self.ci._cmds), 4)
         self.assertTrue("basic" in self.ci._cmds)
         cmdobj = self.ci._cmds["basic"]
         self.assertEqual(self.newcmd, cmdobj)

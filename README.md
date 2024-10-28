@@ -142,7 +142,7 @@ brief instructions:
 
 Issue Tracking
 --------------
-For this issue I am using [git issue](https://github.com/dspinellis/git-issue).
+For this project I am using [git issue](https://github.com/dspinellis/git-issue).
 This is a portable way to track issues that is not dependent on Github, plus
 it is a command line tool.
 
