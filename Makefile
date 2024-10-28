@@ -38,12 +38,17 @@ BUILD_DIR=build
 
 all: help
 
+include python-venv.mak
+
 .PHONY: help
-help:
+help: this_help venv_help
+
+.PHONY: this_help
+this_help:
 	@echo ""
+	@echo "-------------"
 	@echo "Makefile help"
 	@echo "-------------"
-	@echo ""
 	@echo "All target operations use mpremote. It automatically discovers the"
 	@echo "attached board and connects automatically, as long as there is only one."
 	@echo ""
@@ -65,10 +70,6 @@ help:
 	@echo ""
 	@echo "testpico_ws2812 - run ws2812 driver test on attached pico"
 	@echo "testpico_console- run a console IO test on the target"
-	@echo ""
-	@echo "venv        - create python virtual env (automatic when needed)"
-	@echo "cleanvenv   - clean the python venv"
-	@echo "audit       - run python package checker (automatic when needed)"
 	@echo ""
 
 .PHONY: boards
@@ -152,21 +153,3 @@ lint: |venv
 .PHONY: docstyle
 docstyle: |venv
 	@echo "TODO: $@ NOT IMPLEMENTED YET"
-
-venv: venv/bin/activate
-
-venv/bin/activate: requirements.txt
-	test -d venv || python3 -m venv venv
-	venv/bin/python -m pip install -U pip setuptools wheel
-	venv/bin/python -m pip install -Ur $<
-	venv/bin/python -m pip install -U pip-audit
-	touch $@
-	-venv/bin/pip-audit
-
-.PHONY: cleanvenv
-cleanvenv:
-	rm -rf venv
-
-.PHONY: audit
-safety: venv
-	venv/bin/pip-audit
