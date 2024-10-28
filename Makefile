@@ -68,7 +68,7 @@ help:
 	@echo ""
 	@echo "venv        - create python virtual env (automatic when needed)"
 	@echo "cleanvenv   - clean the python venv"
-	@echo "safety      - run python package checked (automatic when needed)"
+	@echo "audit       - run python package checker (automatic when needed)"
 	@echo ""
 
 .PHONY: boards
@@ -159,14 +159,14 @@ venv/bin/activate: requirements.txt
 	test -d venv || python3 -m venv venv
 	venv/bin/python -m pip install -U pip setuptools wheel
 	venv/bin/python -m pip install -Ur $<
-	venv/bin/python -m pip install -U safety
+	venv/bin/python -m pip install -U pip-audit
 	touch $@
-	-venv/bin/safety check
+	-venv/bin/pip-audit
 
 .PHONY: cleanvenv
 cleanvenv:
 	rm -rf venv
 
-.PHONY: safety
+.PHONY: audit
 safety: venv
-	venv/bin/safety check
+	venv/bin/pip-audit
