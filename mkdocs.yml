@@ -1,0 +1,54 @@
+site_name: "rp2040_ledstrip"
+site_url: https://sectioncritical.github.io/rp2040_ledstrip/
+copyright: Copyright 2024 Joseph Kroesche
+repo_url: https://github.com/sectioncritical/rp2040_ledstrip
+
+theme:
+  name: material
+  locale: en
+  navigation_depth: 2
+  custom_dir: theme/
+  palette:
+    scheme: slate
+  features:
+    - navigation.footer
+
+extra_css:
+  - "extra.css"
+
+markdown_extensions:
+  - extra
+  - pymdownx.highlight:
+      use_pygments: true
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: sphinx
+            show_signature_annotations: True
+
+  - git-revision-date-localized:
+      type: iso_date
+
+nav:
+  - "Introduction": README.md
+  - "License": LICENSE.md
+  - "TLDR": tldr.md
+  - "Development Environment": venv.md
+  - "Hardware": hardware.md
+  - "Installing": installing.md
+  - "Using": using.md
+  - "Serial Protocol": protocol.md
+  - "Pattern Commands": implemented-patterns.md
+  - "Adding New Patterns": add-new-patterns.md
+  - API:
+    - api/cmdif.md
+    - api/cmdparser.md
+    - api/console_std.md
+    - api/ws2812_pio.md
+    - api/cmdtemplates.md
+    - api/cmdclasses.md

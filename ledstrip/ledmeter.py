@@ -1,3 +1,74 @@
+#
+# SPDX-License-Identifier: 0BSD
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted.
+#
+# THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+# REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+# AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+# INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+# OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+
+"""meter (LedMeter) - show a level meter over a range of pixels, with gradient.
+
+This command is used to show a "level meter" or "progress meter" over a range
+of pixels in the LED strip. The command has a "percent" parameter which lights
+up the corresponding number of pixels over a defined range. There can also be
+a color gradient. For example all green at the low end and progressively
+getting redder as the value increases.
+
+The command format is:
+
+    $meter,<percent>
+
+where `percent` is 0-100.
+
+Prior to using, the `meter` command must be configured to specify the pixels
+that are part of the meter display, and the color gradient to use. The config
+command has the following format:
+
+    $config,meter,<start-pxel>,<stop-pixel>,<r0>,<rN>,<g0>,<gN>,<b0>,<bN>
+
+* start-pixel - the beginning pixel of the meter display
+* stop-pixel - the ending pixel of the meter display, inclusive
+* r0 - the beginning value for "red"
+* rN - the ending value for "red"
+* g0/gN - begin/end value for "green"
+* b0/bN - begin/end value for "blue"
+
+**NOTES:**
+
+* The colors listed above assume RGB format. Swap values if your order is GRB.
+* The start pixel and stop pixel can be in either increasing or decreasing order
+* the config only need to be done once for a given powered session. If the
+  controller board is repowered or reset, the config command must be sent again
+
+*Example*
+
+A meter function is defined to go from pixel 0 to pixel 19 (20 pixels), in the
+increasing direction. It should be fully red at the low end, and fully green
+at the full end. The colors in mid-scale will be interpolated between the two
+ends.
+
+    $config,meter,0,19,255,0,0,255,0,0
+
+To set the meter display to 50%, half the pixels (10) will be lit ranging from
+red at the lowest end to yellow-ish in the middle:
+
+    $meter,50
+
+There is one meter command built-in, named `meter`. Additional meter instances
+can be added using the `add` command.
+
+    $add,meter2,LedMeter
+
+Will create a second meter function, named `meter2`. It can be configured for
+a different set of pixels and different gradient so you can have two different
+meter displays on a single LED strip.
+"""
 
 from cmdtemplate import CommandTemplate
 

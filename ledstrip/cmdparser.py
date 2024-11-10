@@ -18,57 +18,62 @@
 # - consider if it needs to be more memory efficient. it creates and destroys
 #   bytearrays
 
-# This module implements a simple command line processor. It is meant to be
-# able to accept 1 or more bytes at a time, as they arrive from a serial port
-# for example. Once a proper start and stop framing characters are seen, it
-# returns all the arguments as a list of strings.
-#
-# It is intended to be used from a main loop that is checking for serial or
-# other command input. As bytes are recieved they are passed to this parser
-# and once a properly formatted command is received it returns the args to
-# the main loop caller. The client then decides what to do with the args. This
-# module does not interpret the contents of any incoming commands. It just
-# validates the format and breaks into list of args.
-#
-# The format is:
-# - command starts with '$', anything else is ignored until start character
-#   is seen
-# - there can be one or more args, which are ascii characters, each separated
-#   by a comma with no spaces
-# - the command terminates with a newline \n. It can also tolerate a \r
-#   or combinations of \r\n or \n\r just to accomodate whatever various serial
-#   terminal programs do when you hit enter.
-# - everything is interpreted as ascii, if you pass a unicode character you
-#   will probably get garbage out
-# - it does not echo anything, that is up to client if needed
-# - everything outside of $...\n is ignored
-#
-# A note about efficiency: it creates bytearrays during the process which are
-# then eventually freed. If it causes a memory usage or gc problem then it
-# can be revisited to see how to reuse a single allocated array instead of
-# creating new ones on the fly.
-#
-# The client is meant to only call process_input() and not the other methods
-# in this class.
-#
-# Usage:
-#
-# import cmdparser
-#
-# cp = cmdparser.CmdParser()
-#
-# while (processing main loop):
-#     ...
-#     if incoming_bytes_are_available():
-#         incoming = get_the_incoming_bytes()
-#         cmdargs = cp.process_input(incoming)
-#         # if not None, then there is new args
-#         if cmdargs:
-#             numargs = len(cmdargs)
-#             process_command(cmdargs)
-#             ...
-#     ...
-#
+"""
+This module implements a simple command line processor. It is meant to be able
+to accept 1 or more bytes at a time, as they arrive from a serial port for
+example. Once a proper start and stop framing characters are seen, it returns
+all the arguments as a list of strings.
+
+It is intended to be used from a main loop that is checking for serial or other
+command input. As bytes are recieved they are passed to this parser and once a
+properly formatted command is received it returns the args to the main loop
+caller. The client then decides what to do with the args. This module does not
+interpret the contents of any incoming commands. It just validates the format
+and breaks into list of args.
+
+The format is:
+
+- command starts with '$', anything else is ignored until start character
+  is seen
+- there can be one or more args, which are ascii characters, each separated
+  by a comma with no spaces
+- the command terminates with a newline '\\n'. It can also tolerate a \\r
+  or combinations of \\r\\n or \\n\\r just to accomodate whatever various serial
+  terminal programs do when you hit enter.
+- everything is interpreted as ascii, if you pass a unicode character you
+  will probably get garbage out
+- it does not echo anything, that is up to client if needed
+- everything outside of $...\\n is ignored
+
+A note about efficiency: it creates bytearrays during the process which are
+then eventually freed. If it causes a memory usage or gc problem then it can be
+revisited to see how to reuse a single allocated array instead of creating new
+ones on the fly.
+
+The client is meant to only call process_input() and not the other methods in
+this class.
+
+Usage:
+
+``` py
+import cmdparser
+
+cp = cmdparser.CmdParser()
+
+while (processing main loop):
+    ...
+    if incoming_bytes_are_available():
+        incoming = get_the_incoming_bytes()
+        cmdargs = cp.process_input(incoming)
+        # if not None, then there is new args
+        if cmdargs:
+            numargs = len(cmdargs)
+            process_command(cmdargs)
+            ...
+    ...
+```
+"""
+
 class CmdParser():
     def __init__(self):
         self._buf = None

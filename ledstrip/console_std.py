@@ -12,11 +12,8 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-import select
-import sys
-
 """
-Console IO implementation using stdin/stdout.
+console_std - Console IO implementation using stdin/stdout.
 
 This module implements the following functions for console IO using sys.stdin
 and sys.stdin. Select polling is used for non-blocking input.
@@ -31,6 +28,9 @@ get these function names directly into the namespace and will not need to
 use the module.fn notation.
 """
 
+import select
+import sys
+
 console_poll = None
 
 # initialize whatever we are using for serial comms
@@ -44,38 +44,35 @@ def console_init():
     console_poll = select.poll()
     console_poll.register(sys.stdin, select.POLLIN)
 
-def console_write(printstr):
+def console_write(printstr: str) -> None:
     """Write a string to the console.
 
     Tha string parameter is written to the console without interpretation or
     adding any line terminators.
 
     :param printstr: the string to be printed to the console
-    :type  printstr: str
     """
     sys.stdout.write(printstr)
 
 # write a line to serial console with CRLF termination
-def console_writeln(printstr):
+def console_writeln(printstr: str) -> None:
     """Write a string to the console with line terminator.
 
     This performs the same function as ``console_write`` except that it also
     add a line ending.
 
     :param printstr: the string to be printed to the console
-    :type  printstr: str
     """
     console_write(printstr)
     console_write("\r\n")
 
-def console_read():
+def console_read() -> str:
     """Read available characters from the console input.
 
     Returns a string with any characters that were read from the console input,
     or ``None`` if there was nothing available.
 
     :return: string of one or more characters, or None.
-    :rtype: str
     """
     if console_poll.poll(0):
         input = sys.stdin.read(1)

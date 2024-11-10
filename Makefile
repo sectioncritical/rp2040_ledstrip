@@ -71,14 +71,26 @@ this_help:
 	@echo "testpico_ws2812 - run ws2812 driver test on attached pico"
 	@echo "testpico_console- run a console IO test on the target"
 	@echo ""
+	@echo "-------------"
+	@echo "Documentation"
+	@echo "-------------"
+	@echo "docs-build  - build the documentation"
+	@echo "docs-serve  - serve docs for local viewing"
+	@echo "docs-clean  - clean docs related build products"
+	@echo "gh-pages    - create gh-pages branch (no history)"
+	@echo ""
 
 .PHONY: boards
 boards: |venv
-	venv/bin/mpremote devs
+	@venv/bin/mpremote devs
 
 .PHONY: deploy
 deploy: | venv
-	for f in $(APP_FILES); do venv/bin/mpremote cp $(SRC_DIR)/$$f :$$f; done
+	@for f in $(APP_FILES); do venv/bin/mpremote cp $(SRC_DIR)/$$f :$$f; done
+
+.PHONY: cleanpico
+cleanpico: | venv
+	@for f in $(APP_FILES); do venv/bin/mpremote rm :$$f; done
 
 $(BUILD_DIR):
 	mkdir $@
@@ -89,7 +101,7 @@ $(BUILD_DIR):
 deploy_mpy: $(APP_FILES) | venv $(BUILD_DIR)
 	for f in $(APP_FILES);                                                  \
 	do                                                                      \
-	    mpy-cross $(SRC_DIR)/$$f -o $(BUILD_DIR)/$${f%.py}.mpy;                        \
+	    mpy-cross $(SRC_DIR)/$$f -o $(BUILD_DIR)/$${f%.py}.mpy;             \
 	    venv/bin/mpremote cp $(BUILD_DIR)/$${f%.py}.mpy :                   \
 	done
 
@@ -153,3 +165,25 @@ lint: |venv
 .PHONY: docstyle
 docstyle: |venv
 	@echo "TODO: $@ NOT IMPLEMENTED YET"
+
+# DOCS RELATED TARGETS
+.PHONY: docs-build
+docs-build: |venv
+	venv/bin/mkdocs build
+
+.PHONY: docs-serve
+docs-serve: |venv
+	venv/bin/mkdocs serve
+
+.PHONY: gh-pages
+gh-pages: |venv
+	venv/bin/ghp-import -n -o site
+
+.PHONY: docs-clean
+docs-clean:
+	rm -rf site
+
+.PHONY: issues
+issues:
+	@echo ""
+	@git issue list -o "%T" -l "%i | %T| %D"
