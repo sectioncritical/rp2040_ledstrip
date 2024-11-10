@@ -126,33 +126,11 @@ bootloader: |venv
 terminal: venv
 	venv/bin/python -m serial.tools.miniterm $(SERPORT) 115200
 
-# WAS: uses python builtin unittest module, so does not require venv
-# NOW: run tests using micropython to better match the target environment
-# however unittest doesnt run the normal way so each test module has to
-# be loaded individually
+# runs unit tests from the tests/ directory
+# see that directory for more tests
 .PHONY: test
 test:
-	MICROPYPATH=$(UPYPATH) micropython tests/test_cmdparser.py
-	MICROPYPATH=$(UPYPATH) micropython tests/test_cmdif.py
-#	python3 -m unittest -v tests.test_cmdparser tests.test_cmdif
-
-# run the target based test
-.PHONY: testpico_ws2812
-testpico_ws2812: |venv deploy
-	venv/bin/mpremote run tests/pico_test_ws2812_pio.py
-
-# This one must be run by hand on the target using a terminal. The reason is
-# that the repl used for "run" is what we are testing.
-# To run this after the copy below and the terminal is opened, do:
-#     import test_pic_console_std
-#
-# and the test should run
-#
-.PHONY: testpico_console
-testpico_console: |venv deploy
-	venv/bin/mpremote cp tests/pico_test_console_std.py :
-	@echo "In the REPL, 'import pico_test_console_std' and the test should run"
-	venv/bin/mpremote repl
+	@make -C tests test
 
 .PHONY: clean
 clean:

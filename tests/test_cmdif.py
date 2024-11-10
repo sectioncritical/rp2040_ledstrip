@@ -28,7 +28,7 @@
 # cmdif without having clutter we dont want for the production code.
 
 import unittest
-import cmdif
+from ledstrip import cmdif
 from cmdtemplate import CommandTemplate
 
 call_count = 0

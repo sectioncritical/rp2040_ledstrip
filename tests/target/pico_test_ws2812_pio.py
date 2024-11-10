@@ -29,10 +29,13 @@ import ws2812_pio as wspio
 # each. The cycle should repeat 10 times.
 
 def run():
+    print("running ws2812 test")
+    print("you should see 3 LEDs blinking in sequence for about 15 seconds")
     ws = wspio.WS2812(smid=0, pin=16)
     pixels = array.array("I", [0 for _ in range(3)])
     colors = [0x003f00, 0x3f0000, 0x00003f]
     for _ in range(10):
+        print("*", end="")
         for pix in range(3):
             pixels[pix] = colors[pix]
             pixels[pix-1] = 0
@@ -43,6 +46,7 @@ def run():
     ws.show(pixels)
     time.sleep_ms(100)
     ws.shutdown()
+    print("\nTest exiting")
 
 run()
 

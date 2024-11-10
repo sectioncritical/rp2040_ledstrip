@@ -22,7 +22,7 @@
 
 import unittest
 
-import cmdparser
+from ledstrip import cmdparser
 
 # most of the logic is test by the other test cases
 # this one is just to validate the public facing wrapper method
