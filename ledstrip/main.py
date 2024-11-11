@@ -24,4 +24,3 @@ while True:
     repaint = ci.run()
     if repaint:
         ws.show(pixels)
-

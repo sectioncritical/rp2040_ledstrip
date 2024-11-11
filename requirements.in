@@ -6,3 +6,6 @@ mpremote
 ghp-import
 linkchecker
 nodeenv
+pylint
+pydocstyle
+#pycodesyle

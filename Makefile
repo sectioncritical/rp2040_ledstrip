@@ -138,11 +138,11 @@ clean:
 
 .PHONY: lint
 lint: |venv
-	@echo "TODO: $@ NOT IMPLEMENTED YET"
+	venv/bin/pylint --rcfile=pylintrc --enable-all-extensions ledstrip
 
 .PHONY: docstyle
 docstyle: |venv
-	@echo "TODO: $@ NOT IMPLEMENTED YET"
+	venv/bin/pydocstyle ledstrip
 
 # DOCS RELATED TARGETS
 .PHONY: docs-build

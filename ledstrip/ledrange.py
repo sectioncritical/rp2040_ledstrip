@@ -42,6 +42,7 @@ The `range` command does not have any configuration settings.
 from cmdtemplate import CommandTemplate
 
 class LedRange(CommandTemplate):
+    # pylint: disable=missing-class-docstring
     helpstr = "set range to color <range,start,num,r,g,b>"
 
     def render(self, parmlist, framebuf):
@@ -55,4 +56,4 @@ class LedRange(CommandTemplate):
         color += blue
         for idx in range(numdots):
             framebuf[dot0+idx] = color
-        return None     # no further calls needed
+        # returns None - no further calls needed
