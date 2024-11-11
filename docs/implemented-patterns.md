@@ -13,3 +13,9 @@ This page describes the pattern commands that are implemented in the firmware.
 ## meter
 
 ::: ledstrip.ledmeter
+
+*****
+
+## random
+
+::: ledstrip.ledrandom

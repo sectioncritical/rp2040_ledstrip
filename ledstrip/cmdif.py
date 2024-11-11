@@ -72,7 +72,7 @@ class CmdHelp(CommandTemplate):
         console_writeln("--------")
         for cmdname, cmdobj in self._dict.items():
             cmdhelp = cmdobj.helpstr
-            console_writeln(f"{cmdname:<8}: {cmdhelp}")
+            console_writeln(f"{cmdname:<8} : {cmdhelp}")
         console_writeln("")
 
     def cfghelp(self):
@@ -81,7 +81,7 @@ class CmdHelp(CommandTemplate):
         console_writeln("-------")
         for cmdname, cmdobj in self._dict.items():
             cfghelp = cmdobj.cfgstr
-            console_writeln(f"{cmdname:<8}: {cfghelp}")
+            console_writeln(f"{cmdname:<8} : {cfghelp}")
         console_writeln("")
 
     # this is called whenever parm[0]=='help'
@@ -171,6 +171,8 @@ class CmdInterface():
         # temporary additional commands
         self._cmds["range"] = LedRange()
         self._cmds["meter"] = LedMeter()
+        self._cmds["randomog"] = LedRandomOG()
+        self._cmds["random"] = LedRandom()
         #
 
         self._cp = cmdparser.CmdParser()
