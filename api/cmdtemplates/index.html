@@ -1,0 +1,1898 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://sectioncritical.github.io/rp2040_ledstrip/api/cmdtemplates/">
+      
+      
+        <link rel="prev" href="../ws2812_pio/">
+      
+      
+        <link rel="next" href="../cmdclasses/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+    
+    
+      
+        <title>Command Template - rp2040_ledstrip</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#command-template" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="rp2040_ledstrip" class="md-header__button md-logo" aria-label="rp2040_ledstrip" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            rp2040_ledstrip
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Command Template
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sectioncritical/rp2040_ledstrip" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="rp2040_ledstrip" class="md-nav__button md-logo" aria-label="rp2040_ledstrip" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    rp2040_ledstrip
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sectioncritical/rp2040_ledstrip" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tldr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TLDR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../venv/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hardware
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../using/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Serial Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../implemented-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pattern Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../add-new-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adding New Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cmdif/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Interface Module
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cmdparser/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Parser
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../console_std/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Console Standard
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ws2812_pio/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WS2812 PIO Driver
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Command Template
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Command Template
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate" class="md-nav__link">
+    <span class="md-ellipsis">
+      cmdtemplate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate" class="md-nav__link">
+    <span class="md-ellipsis">
+      CommandTemplate
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CommandTemplate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate.cfgstr" class="md-nav__link">
+    <span class="md-ellipsis">
+      cfgstr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate.helpstr" class="md-nav__link">
+    <span class="md-ellipsis">
+      helpstr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate.config" class="md-nav__link">
+    <span class="md-ellipsis">
+      config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate.render" class="md-nav__link">
+    <span class="md-ellipsis">
+      render
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cmdclasses/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Classes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate" class="md-nav__link">
+    <span class="md-ellipsis">
+      cmdtemplate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate" class="md-nav__link">
+    <span class="md-ellipsis">
+      CommandTemplate
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CommandTemplate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate.cfgstr" class="md-nav__link">
+    <span class="md-ellipsis">
+      cfgstr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate.helpstr" class="md-nav__link">
+    <span class="md-ellipsis">
+      helpstr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate.config" class="md-nav__link">
+    <span class="md-ellipsis">
+      config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdtemplate.CommandTemplate.render" class="md-nav__link">
+    <span class="md-ellipsis">
+      render
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="command-template">Command Template</h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="ledstrip.cmdtemplate"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="ledstrip.cmdtemplate.CommandTemplate" class="doc doc-heading">
+            <code>CommandTemplate</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>CommandTemplate for implementing commands.</p>
+<p>This is a base class that is used for all commands. Any command (pattern)
+inherits from this class. If you are creating a new command or pattern, create
+a new class using this as a base class:</p>
+<div class="language-text highlight"><pre><span></span><code>from cmdtemplate import CommandTemplate
+...
+
+class MyCommand(CommandTemplate):
+    ...
+</code></pre></div>
+<p>The new command class must implement one required method <code>render()</code>. There is
+an optional method, <code>config()</code> which is only needed if the new command has
+configuration attributes. Each of these is documented below.</p>
+<p>The new class should also be added to <code>cmdclasses.py</code> so that it will be made
+available to the command processor code.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>ledstrip/cmdtemplate.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CommandTemplate</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    CommandTemplate for implementing commands.</span>
+
+<span class="sd">    This is a base class that is used for all commands. Any command (pattern)</span>
+<span class="sd">    inherits from this class. If you are creating a new command or pattern, create</span>
+<span class="sd">    a new class using this as a base class:</span>
+
+<span class="sd">        from cmdtemplate import CommandTemplate</span>
+<span class="sd">        ...</span>
+
+<span class="sd">        class MyCommand(CommandTemplate):</span>
+<span class="sd">            ...</span>
+
+<span class="sd">    The new command class must implement one required method `render()`. There is</span>
+<span class="sd">    an optional method, `config()` which is only needed if the new command has</span>
+<span class="sd">    configuration attributes. Each of these is documented below.</span>
+
+<span class="sd">    The new class should also be added to `cmdclasses.py` so that it will be made</span>
+<span class="sd">    available to the command processor code.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">helpstr</span> <span class="o">=</span> <span class="s2">&quot;n/a&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Brief help string for the command.</span>
+
+<span class="sd">    This will be shown by the help command. It should be pretty short.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cfgstr</span> <span class="o">=</span> <span class="s2">&quot;no configs&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Brief help for configuration parameters.</span>
+
+<span class="sd">    This will be shown by the `$help,config` command. It should be very short</span>
+<span class="sd">    list of the parameters and any description.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delay</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># cfglist - list-like of strings with config values</span>
+    <span class="c1"># cfglist[0] is &quot;config&quot; and cfglist[1] is command name</span>
+    <span class="c1"># so config parameters start with cfglist[2]</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfglist</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optional method for configuring the command.</span>
+
+<span class="sd">        This method is used if the command has any configurable attributes. If</span>
+<span class="sd">        the command has nothing to configure, then this does not need to be</span>
+<span class="sd">        implemented by the subclass.</span>
+
+<span class="sd">        This method will be called when the config command is issued for a</span>
+<span class="sd">        specific command. For example, if the command has three configurable</span>
+<span class="sd">        attributes, the config command might look like:</span>
+
+<span class="sd">            $config,mycommand,parm1,parm2,parm3</span>
+
+<span class="sd">        The method is always passed the attributes as a list of strings. The</span>
+<span class="sd">        first two items in the list are &quot;config&quot; command itself, and the name</span>
+<span class="sd">        of the command being configured (&quot;mycommand&quot; in the above example).</span>
+
+<span class="sd">        The command class and the command name are related but separate. It is</span>
+<span class="sd">        possible to have two different named commands that have the same</span>
+<span class="sd">        underlying command class. In this case, the implementation of `config`</span>
+<span class="sd">        could have conditional behavior depending on the name of the command.</span>
+
+<span class="sd">        All the parameters are passed as strings, but they are almost certainly</span>
+<span class="sd">        integers, so they need to be converted when they are stored, using</span>
+<span class="sd">        `int(v)`.</span>
+
+<span class="sd">        *Example Implementation*</span>
+
+<span class="sd">            def config(self, cfglist):</span>
+<span class="sd">                # cfglist[0] is &quot;config&quot;</span>
+<span class="sd">                # cfglist[1] is &quot;mycommand&quot; - the name of the command</span>
+<span class="sd">                self.attr1 = int(cfglist[2])  # first parameter</span>
+<span class="sd">                self.attr2 = int(cfglist[3])</span>
+<span class="sd">                self.attr3 = int(cfglist[4])</span>
+<span class="sd">                ...</span>
+<span class="sd">                # possible other processing</span>
+
+<span class="sd">        Nothing is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># parmlist - list-like of strings with run-time parameters</span>
+    <span class="c1"># parmlist[0] is command name</span>
+    <span class="c1"># so command parms start with parmlist[1]</span>
+    <span class="c1"># framebuf - implementation specific display device but usually</span>
+    <span class="c1">#           a pixel array</span>
+    <span class="c1">#</span>
+    <span class="c1"># returns: None - no further calls needed</span>
+    <span class="c1">#          0 - call again immediately to run pattern</span>
+    <span class="c1">#          &gt;0 - microseconds to delay before calling again</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parmlist</span><span class="p">,</span> <span class="n">framebuf</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Required method to carry out the command actions.</span>
+
+<span class="sd">        This method is called whenever the command is invoked. Any parameters</span>
+<span class="sd">        are passed in as a list. For example:</span>
+
+<span class="sd">            $mycommand,parm1</span>
+
+<span class="sd">        The method is passed a list of strings. The first entry is the command</span>
+<span class="sd">        name which could be used for conditional behavior depending on the</span>
+<span class="sd">        command name. The first parameter from the command line is the second</span>
+<span class="sd">        item in the list.</span>
+
+<span class="sd">        A pixel array named `framebuf` is passed to the method. This is an</span>
+<span class="sd">        array of 32-bit integers that represents the color values of a pixel.</span>
+<span class="sd">        Assuming RGB, then the bits in the integer are arranged like this:</span>
+
+<span class="sd">            [31:24] - not used</span>
+<span class="sd">            [23:16] - red value</span>
+<span class="sd">            [15:8] - green value</span>
+<span class="sd">            [7:0] - blue value</span>
+
+<span class="sd">        The `render` method should carry out any actions that are required to</span>
+<span class="sd">        execute the command. For example if it an LED pattern, then the method</span>
+<span class="sd">        should calculate how each LED should be lit and store the pixel values</span>
+<span class="sd">        in the `framebuf` array. `render` needs to calculate the pixel value</span>
+<span class="sd">        for any pixels it changes, and set the R, G, and B fields to the</span>
+<span class="sd">        calculated values.</span>
+
+<span class="sd">        The `render` method is called using a simple scheduling process. This</span>
+<span class="sd">        allows for repeating or progressing patterns (a chase for example) to</span>
+<span class="sd">        be continually recalculated and redrawn.</span>
+
+<span class="sd">        `render` can return three different ways:</span>
+
+<span class="sd">        * None - this is a one-shot command, does not need to run again</span>
+<span class="sd">        * 0 - call back immediately - for continuous updating at maximum rate</span>
+<span class="sd">        * N (where N is int&gt;0) - N is a delay in microseconds, render will be</span>
+<span class="sd">          called back after that amount of time</span>
+
+<span class="sd">        Upon return from `render()`, the LED strip will be updated using the</span>
+<span class="sd">        pixel values in `framebuf`.</span>
+
+<span class="sd">        *Example One-Shot Command*</span>
+
+<span class="sd">        ``` py</span>
+<span class="sd">        # command named &quot;ledset&quot; to turn on a single pixel</span>
+<span class="sd">        # &quot;$ledset,pixnum,r,g,b&quot;</span>
+<span class="sd">        #</span>
+<span class="sd">        def render(self, parmlist, framebuf):</span>
+<span class="sd">            # parmlist[0] is &quot;ledset&quot;</span>
+<span class="sd">            # should probably check for valid pixnum (not shown)</span>
+<span class="sd">            pixnum = int(parmlist[1])</span>
+<span class="sd">            # get color parameters as integers</span>
+<span class="sd">            red = int(parmlist[2])</span>
+<span class="sd">            grn = int(parmlist[3])</span>
+<span class="sd">            blu = int(parmlist[4])</span>
+<span class="sd">            # calculate the pixel value for the given color parameters</span>
+<span class="sd">            color = (red &lt;&lt; 16) + (grn &lt;&lt; 8) + blu</span>
+<span class="sd">            # set the specified pixel in the frame buffer</span>
+<span class="sd">            framebuf[pixnum] = color</span>
+
+<span class="sd">            # this one does not need to be repeated, so return None</span>
+<span class="sd">            return None</span>
+<span class="sd">        ```</span>
+
+<span class="sd">        *Example Periodic Command*</span>
+
+<span class="sd">        ``` py</span>
+
+<span class="sd">        # the class needs its own variables to track state</span>
+<span class="sd">        def __init__():</span>
+<span class="sd">            super().__init__()  # get the superclass</span>
+<span class="sd">            self._delay = 10000  # 10 ms, overrides default of None</span>
+<span class="sd">            self._pixnum = 0</span>
+<span class="sd">            self._pixmax = 100   # could be configurable</span>
+
+<span class="sd">        # command named &quot;ledrun&quot; to cause a single pixel to &quot;run&quot; down the strip</span>
+<span class="sd">        # the lit LED will run from pixel 0 to some limit and then repeat</span>
+<span class="sd">        # in this example the limit is hard coded, but it could be a</span>
+<span class="sd">        # configurable attribute</span>
+<span class="sd">        # &quot;$ledrun,r,g,b&quot;</span>
+<span class="sd">        #</span>
+<span class="sd">        def render(self, parmlist, framebuf):</span>
+<span class="sd">            # parmlist[0] is &quot;ledrun&quot;</span>
+<span class="sd">            # get color parameters as integers</span>
+<span class="sd">            red = int(parmlist[1])</span>
+<span class="sd">            grn = int(parmlist[2])</span>
+<span class="sd">            blu = int(parmlist[3])</span>
+<span class="sd">            # calculate the pixel value for the given color parameters</span>
+<span class="sd">            color = (red &lt;&lt; 16) + (grn &lt;&lt; 8) + blu</span>
+
+<span class="sd">            # clear the last pixel that was lit</span>
+<span class="sd">            framebuf[self._pixnum] = 0</span>
+
+<span class="sd">            # advance the pixel, and set the color</span>
+<span class="sd">            self._pixnum += 1</span>
+<span class="sd">            if self._pixnum &gt; self._pixmax:</span>
+<span class="sd">                self._pixnum = 0  # reset to beginning</span>
+
+<span class="sd">            framebuf[self._pixnum] = color  # turn on new pixel</span>
+
+<span class="sd">            # repeat after a fixed delay (run periodically)</span>
+<span class="sd">            return self._delay</span>
+<span class="sd">        ```</span>
+
+
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="ledstrip.cmdtemplate.CommandTemplate.cfgstr" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cfgstr</span> <span class="o">=</span> <span class="s1">&#39;no configs&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Brief help for configuration parameters.</p>
+<p>This will be shown by the <code>$help,config</code> command. It should be very short
+list of the parameters and any description.</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="ledstrip.cmdtemplate.CommandTemplate.helpstr" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">helpstr</span> <span class="o">=</span> <span class="s1">&#39;n/a&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Brief help string for the command.</p>
+<p>This will be shown by the help command. It should be pretty short.</p>
+    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="ledstrip.cmdtemplate.CommandTemplate.config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">config</span><span class="p">(</span><span class="n">cfglist</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Optional method for configuring the command.</p>
+<p>This method is used if the command has any configurable attributes. If
+the command has nothing to configure, then this does not need to be
+implemented by the subclass.</p>
+<p>This method will be called when the config command is issued for a
+specific command. For example, if the command has three configurable
+attributes, the config command might look like:</p>
+<div class="language-text highlight"><pre><span></span><code>$config,mycommand,parm1,parm2,parm3
+</code></pre></div>
+<p>The method is always passed the attributes as a list of strings. The
+first two items in the list are "config" command itself, and the name
+of the command being configured ("mycommand" in the above example).</p>
+<p>The command class and the command name are related but separate. It is
+possible to have two different named commands that have the same
+underlying command class. In this case, the implementation of <code>config</code>
+could have conditional behavior depending on the name of the command.</p>
+<p>All the parameters are passed as strings, but they are almost certainly
+integers, so they need to be converted when they are stored, using
+<code>int(v)</code>.</p>
+<p><em>Example Implementation</em></p>
+<div class="language-text highlight"><pre><span></span><code>def config(self, cfglist):
+    # cfglist[0] is &quot;config&quot;
+    # cfglist[1] is &quot;mycommand&quot; - the name of the command
+    self.attr1 = int(cfglist[2])  # first parameter
+    self.attr2 = int(cfglist[3])
+    self.attr3 = int(cfglist[4])
+    ...
+    # possible other processing
+</code></pre></div>
+<p>Nothing is returned.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ledstrip/cmdtemplate.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfglist</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optional method for configuring the command.</span>
+
+<span class="sd">    This method is used if the command has any configurable attributes. If</span>
+<span class="sd">    the command has nothing to configure, then this does not need to be</span>
+<span class="sd">    implemented by the subclass.</span>
+
+<span class="sd">    This method will be called when the config command is issued for a</span>
+<span class="sd">    specific command. For example, if the command has three configurable</span>
+<span class="sd">    attributes, the config command might look like:</span>
+
+<span class="sd">        $config,mycommand,parm1,parm2,parm3</span>
+
+<span class="sd">    The method is always passed the attributes as a list of strings. The</span>
+<span class="sd">    first two items in the list are &quot;config&quot; command itself, and the name</span>
+<span class="sd">    of the command being configured (&quot;mycommand&quot; in the above example).</span>
+
+<span class="sd">    The command class and the command name are related but separate. It is</span>
+<span class="sd">    possible to have two different named commands that have the same</span>
+<span class="sd">    underlying command class. In this case, the implementation of `config`</span>
+<span class="sd">    could have conditional behavior depending on the name of the command.</span>
+
+<span class="sd">    All the parameters are passed as strings, but they are almost certainly</span>
+<span class="sd">    integers, so they need to be converted when they are stored, using</span>
+<span class="sd">    `int(v)`.</span>
+
+<span class="sd">    *Example Implementation*</span>
+
+<span class="sd">        def config(self, cfglist):</span>
+<span class="sd">            # cfglist[0] is &quot;config&quot;</span>
+<span class="sd">            # cfglist[1] is &quot;mycommand&quot; - the name of the command</span>
+<span class="sd">            self.attr1 = int(cfglist[2])  # first parameter</span>
+<span class="sd">            self.attr2 = int(cfglist[3])</span>
+<span class="sd">            self.attr3 = int(cfglist[4])</span>
+<span class="sd">            ...</span>
+<span class="sd">            # possible other processing</span>
+
+<span class="sd">    Nothing is returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="ledstrip.cmdtemplate.CommandTemplate.render" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">render</span><span class="p">(</span><span class="n">parmlist</span><span class="p">,</span> <span class="n">framebuf</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Required method to carry out the command actions.</p>
+<p>This method is called whenever the command is invoked. Any parameters
+are passed in as a list. For example:</p>
+<div class="language-text highlight"><pre><span></span><code>$mycommand,parm1
+</code></pre></div>
+<p>The method is passed a list of strings. The first entry is the command
+name which could be used for conditional behavior depending on the
+command name. The first parameter from the command line is the second
+item in the list.</p>
+<p>A pixel array named <code>framebuf</code> is passed to the method. This is an
+array of 32-bit integers that represents the color values of a pixel.
+Assuming RGB, then the bits in the integer are arranged like this:</p>
+<div class="language-text highlight"><pre><span></span><code>[31:24] - not used
+[23:16] - red value
+[15:8] - green value
+[7:0] - blue value
+</code></pre></div>
+<p>The <code>render</code> method should carry out any actions that are required to
+execute the command. For example if it an LED pattern, then the method
+should calculate how each LED should be lit and store the pixel values
+in the <code>framebuf</code> array. <code>render</code> needs to calculate the pixel value
+for any pixels it changes, and set the R, G, and B fields to the
+calculated values.</p>
+<p>The <code>render</code> method is called using a simple scheduling process. This
+allows for repeating or progressing patterns (a chase for example) to
+be continually recalculated and redrawn.</p>
+<p><code>render</code> can return three different ways:</p>
+<ul>
+<li>None - this is a one-shot command, does not need to run again</li>
+<li>0 - call back immediately - for continuous updating at maximum rate</li>
+<li>N (where N is int&gt;0) - N is a delay in microseconds, render will be
+  called back after that amount of time</li>
+</ul>
+<p>Upon return from <code>render()</code>, the LED strip will be updated using the
+pixel values in <code>framebuf</code>.</p>
+<p><em>Example One-Shot Command</em></p>
+<pre><code class="language-py"># command named &quot;ledset&quot; to turn on a single pixel
+# &quot;$ledset,pixnum,r,g,b&quot;
+#
+def render(self, parmlist, framebuf):
+    # parmlist[0] is &quot;ledset&quot;
+    # should probably check for valid pixnum (not shown)
+    pixnum = int(parmlist[1])
+    # get color parameters as integers
+    red = int(parmlist[2])
+    grn = int(parmlist[3])
+    blu = int(parmlist[4])
+    # calculate the pixel value for the given color parameters
+    color = (red &lt;&lt; 16) + (grn &lt;&lt; 8) + blu
+    # set the specified pixel in the frame buffer
+    framebuf[pixnum] = color
+
+    # this one does not need to be repeated, so return None
+    return None
+</code></pre>
+<p><em>Example Periodic Command</em></p>
+<pre><code class="language-py">
+# the class needs its own variables to track state
+def __init__():
+    super().__init__()  # get the superclass
+    self._delay = 10000  # 10 ms, overrides default of None
+    self._pixnum = 0
+    self._pixmax = 100   # could be configurable
+
+# command named &quot;ledrun&quot; to cause a single pixel to &quot;run&quot; down the strip
+# the lit LED will run from pixel 0 to some limit and then repeat
+# in this example the limit is hard coded, but it could be a
+# configurable attribute
+# &quot;$ledrun,r,g,b&quot;
+#
+def render(self, parmlist, framebuf):
+    # parmlist[0] is &quot;ledrun&quot;
+    # get color parameters as integers
+    red = int(parmlist[1])
+    grn = int(parmlist[2])
+    blu = int(parmlist[3])
+    # calculate the pixel value for the given color parameters
+    color = (red &lt;&lt; 16) + (grn &lt;&lt; 8) + blu
+
+    # clear the last pixel that was lit
+    framebuf[self._pixnum] = 0
+
+    # advance the pixel, and set the color
+    self._pixnum += 1
+    if self._pixnum &gt; self._pixmax:
+        self._pixnum = 0  # reset to beginning
+
+    framebuf[self._pixnum] = color  # turn on new pixel
+
+    # repeat after a fixed delay (run periodically)
+    return self._delay
+</code></pre>
+
+            <details class="quote">
+              <summary>Source code in <code>ledstrip/cmdtemplate.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parmlist</span><span class="p">,</span> <span class="n">framebuf</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Required method to carry out the command actions.</span>
+
+<span class="sd">    This method is called whenever the command is invoked. Any parameters</span>
+<span class="sd">    are passed in as a list. For example:</span>
+
+<span class="sd">        $mycommand,parm1</span>
+
+<span class="sd">    The method is passed a list of strings. The first entry is the command</span>
+<span class="sd">    name which could be used for conditional behavior depending on the</span>
+<span class="sd">    command name. The first parameter from the command line is the second</span>
+<span class="sd">    item in the list.</span>
+
+<span class="sd">    A pixel array named `framebuf` is passed to the method. This is an</span>
+<span class="sd">    array of 32-bit integers that represents the color values of a pixel.</span>
+<span class="sd">    Assuming RGB, then the bits in the integer are arranged like this:</span>
+
+<span class="sd">        [31:24] - not used</span>
+<span class="sd">        [23:16] - red value</span>
+<span class="sd">        [15:8] - green value</span>
+<span class="sd">        [7:0] - blue value</span>
+
+<span class="sd">    The `render` method should carry out any actions that are required to</span>
+<span class="sd">    execute the command. For example if it an LED pattern, then the method</span>
+<span class="sd">    should calculate how each LED should be lit and store the pixel values</span>
+<span class="sd">    in the `framebuf` array. `render` needs to calculate the pixel value</span>
+<span class="sd">    for any pixels it changes, and set the R, G, and B fields to the</span>
+<span class="sd">    calculated values.</span>
+
+<span class="sd">    The `render` method is called using a simple scheduling process. This</span>
+<span class="sd">    allows for repeating or progressing patterns (a chase for example) to</span>
+<span class="sd">    be continually recalculated and redrawn.</span>
+
+<span class="sd">    `render` can return three different ways:</span>
+
+<span class="sd">    * None - this is a one-shot command, does not need to run again</span>
+<span class="sd">    * 0 - call back immediately - for continuous updating at maximum rate</span>
+<span class="sd">    * N (where N is int&gt;0) - N is a delay in microseconds, render will be</span>
+<span class="sd">      called back after that amount of time</span>
+
+<span class="sd">    Upon return from `render()`, the LED strip will be updated using the</span>
+<span class="sd">    pixel values in `framebuf`.</span>
+
+<span class="sd">    *Example One-Shot Command*</span>
+
+<span class="sd">    ``` py</span>
+<span class="sd">    # command named &quot;ledset&quot; to turn on a single pixel</span>
+<span class="sd">    # &quot;$ledset,pixnum,r,g,b&quot;</span>
+<span class="sd">    #</span>
+<span class="sd">    def render(self, parmlist, framebuf):</span>
+<span class="sd">        # parmlist[0] is &quot;ledset&quot;</span>
+<span class="sd">        # should probably check for valid pixnum (not shown)</span>
+<span class="sd">        pixnum = int(parmlist[1])</span>
+<span class="sd">        # get color parameters as integers</span>
+<span class="sd">        red = int(parmlist[2])</span>
+<span class="sd">        grn = int(parmlist[3])</span>
+<span class="sd">        blu = int(parmlist[4])</span>
+<span class="sd">        # calculate the pixel value for the given color parameters</span>
+<span class="sd">        color = (red &lt;&lt; 16) + (grn &lt;&lt; 8) + blu</span>
+<span class="sd">        # set the specified pixel in the frame buffer</span>
+<span class="sd">        framebuf[pixnum] = color</span>
+
+<span class="sd">        # this one does not need to be repeated, so return None</span>
+<span class="sd">        return None</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    *Example Periodic Command*</span>
+
+<span class="sd">    ``` py</span>
+
+<span class="sd">    # the class needs its own variables to track state</span>
+<span class="sd">    def __init__():</span>
+<span class="sd">        super().__init__()  # get the superclass</span>
+<span class="sd">        self._delay = 10000  # 10 ms, overrides default of None</span>
+<span class="sd">        self._pixnum = 0</span>
+<span class="sd">        self._pixmax = 100   # could be configurable</span>
+
+<span class="sd">    # command named &quot;ledrun&quot; to cause a single pixel to &quot;run&quot; down the strip</span>
+<span class="sd">    # the lit LED will run from pixel 0 to some limit and then repeat</span>
+<span class="sd">    # in this example the limit is hard coded, but it could be a</span>
+<span class="sd">    # configurable attribute</span>
+<span class="sd">    # &quot;$ledrun,r,g,b&quot;</span>
+<span class="sd">    #</span>
+<span class="sd">    def render(self, parmlist, framebuf):</span>
+<span class="sd">        # parmlist[0] is &quot;ledrun&quot;</span>
+<span class="sd">        # get color parameters as integers</span>
+<span class="sd">        red = int(parmlist[1])</span>
+<span class="sd">        grn = int(parmlist[2])</span>
+<span class="sd">        blu = int(parmlist[3])</span>
+<span class="sd">        # calculate the pixel value for the given color parameters</span>
+<span class="sd">        color = (red &lt;&lt; 16) + (grn &lt;&lt; 8) + blu</span>
+
+<span class="sd">        # clear the last pixel that was lit</span>
+<span class="sd">        framebuf[self._pixnum] = 0</span>
+
+<span class="sd">        # advance the pixel, and set the color</span>
+<span class="sd">        self._pixnum += 1</span>
+<span class="sd">        if self._pixnum &gt; self._pixmax:</span>
+<span class="sd">            self._pixnum = 0  # reset to beginning</span>
+
+<span class="sd">        framebuf[self._pixnum] = color  # turn on new pixel</span>
+
+<span class="sd">        # repeat after a fixed delay (run periodically)</span>
+<span class="sd">        return self._delay</span>
+<span class="sd">    ```</span>
+
+
+
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-11-10</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../ws2812_pio/" class="md-footer__link md-footer__link--prev" aria-label="Previous: WS2812 PIO Driver">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                WS2812 PIO Driver
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../cmdclasses/" class="md-footer__link md-footer__link--next" aria-label="Next: Command Classes">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Command Classes
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright 2024 Joseph Kroesche
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.footer"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>

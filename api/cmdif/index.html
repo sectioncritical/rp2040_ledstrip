@@ -1,0 +1,2140 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://sectioncritical.github.io/rp2040_ledstrip/api/cmdif/">
+      
+      
+        <link rel="prev" href="../../add-new-patterns/">
+      
+      
+        <link rel="next" href="../cmdparser/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+    
+    
+      
+        <title>Command Interface Module - rp2040_ledstrip</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#command-interface-module" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="rp2040_ledstrip" class="md-header__button md-logo" aria-label="rp2040_ledstrip" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            rp2040_ledstrip
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Command Interface Module
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sectioncritical/rp2040_ledstrip" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="rp2040_ledstrip" class="md-nav__button md-logo" aria-label="rp2040_ledstrip" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    rp2040_ledstrip
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sectioncritical/rp2040_ledstrip" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tldr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TLDR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../venv/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hardware
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../using/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Serial Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../implemented-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pattern Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../add-new-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adding New Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Command Interface Module
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Command Interface Module
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif" class="md-nav__link">
+    <span class="md-ellipsis">
+      cmdif
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdAdd" class="md-nav__link">
+    <span class="md-ellipsis">
+      CmdAdd
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      CmdConfig
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdHelp" class="md-nav__link">
+    <span class="md-ellipsis">
+      CmdHelp
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CmdHelp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdHelp.cfghelp" class="md-nav__link">
+    <span class="md-ellipsis">
+      cfghelp
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdHelp.cmdhelp" class="md-nav__link">
+    <span class="md-ellipsis">
+      cmdhelp
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      CmdInterface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CmdInterface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface.add_cmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_cmd
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface.exec" class="md-nav__link">
+    <span class="md-ellipsis">
+      exec
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface.setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      setup
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cmdparser/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Parser
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../console_std/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Console Standard
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ws2812_pio/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WS2812 PIO Driver
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cmdtemplates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Template
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cmdclasses/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Classes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif" class="md-nav__link">
+    <span class="md-ellipsis">
+      cmdif
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdAdd" class="md-nav__link">
+    <span class="md-ellipsis">
+      CmdAdd
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      CmdConfig
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdHelp" class="md-nav__link">
+    <span class="md-ellipsis">
+      CmdHelp
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CmdHelp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdHelp.cfghelp" class="md-nav__link">
+    <span class="md-ellipsis">
+      cfghelp
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdHelp.cmdhelp" class="md-nav__link">
+    <span class="md-ellipsis">
+      cmdhelp
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      CmdInterface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CmdInterface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface.add_cmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_cmd
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface.exec" class="md-nav__link">
+    <span class="md-ellipsis">
+      exec
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ledstrip.cmdif.CmdInterface.setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      setup
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="command-interface-module">Command Interface Module</h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="ledstrip.cmdif"></a>
+    <div class="doc doc-contents first">
+
+        <p>cmdif - Command Interface Processor.</p>
+<p>This module implements a command interface for receiving commands from a
+console, processing, the command, and printing results. Commands are
+implemented in a standardized way (see <a class="autorefs autorefs-internal" href="../cmdtemplates/#ledstrip.cmdtemplate">CommandTemplate</a>)
+to make it "easy" to add additional commands, sort of like a plugin. Any
+command implementation can schedule itself to run once, repeatedly, or with
+periodic timing.</p>
+<p>Most commands are added from their own modules, but there are some built-in
+commands here that are used to support all commands:</p>
+<ul>
+<li>CmdHelp - provide a basic help function</li>
+<li>CmdConfig - provide a way to pass configuration to any command module</li>
+<li>CmdAdd - provide a way to add new command module to the list of commands</li>
+</ul>
+<p>This module relies on the presence of the <a class="autorefs autorefs-internal" href="../console_std/#ledstrip.console_std"><code>console_std</code></a>
+module which provides an abstraction of read and write functions for a console.
+This should allow this module to be used with different mechanisms of input and
+output.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="ledstrip.cmdif.CmdAdd" class="doc doc-heading">
+            <code>CmdAdd</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="cmdtemplate.CommandTemplate">CommandTemplate</span></code></p>
+
+
+        <p>Provide a command that allows adding new commands.</p>
+<p>Any command classes that are implemented and listed in
+<a class="autorefs autorefs-internal" href="../cmdclasses/#ledstrip.cmdclasses"><code>cmdclasses.py</code></a> can be added to the command list.
+This allows for the existence of many kinds of commands (mostly LED
+patterns) when only some will be used for a particular installation. Common
+firmware can be installed on multiple controllers, and the <code>add</code> command in
+combination with the <code>config</code> command allows a particular controller to be
+configured at run time from the console command line.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CmdAdd</span><span class="p">(</span><span class="n">CommandTemplate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provide a command that allows adding new commands.</span>
+
+<span class="sd">    Any command classes that are implemented and listed in</span>
+<span class="sd">    [`cmdclasses.py`][ledstrip.cmdclasses] can be added to the command list.</span>
+<span class="sd">    This allows for the existence of many kinds of commands (mostly LED</span>
+<span class="sd">    patterns) when only some will be used for a particular installation. Common</span>
+<span class="sd">    firmware can be installed on multiple controllers, and the `add` command in</span>
+<span class="sd">    combination with the `config` command allows a particular controller to be</span>
+<span class="sd">    configured at run time from the console command line.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">helpstr</span> <span class="o">=</span> <span class="s2">&quot;Add new command (add,newname,ClassName)&quot;</span>
+
+    <span class="c1"># provide the cmdinterface so it can add commands</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmdinterface</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ci</span> <span class="o">=</span> <span class="n">cmdinterface</span>
+
+    <span class="c1"># TODO add error handling to below</span>
+
+    <span class="c1"># this is called when parm[0]==&#39;add&#39;</span>
+    <span class="c1"># parm[1] should be the name of the command (how it will be invoked)</span>
+    <span class="c1"># parm[2] is the Class name that implements the command (from cmdclasses.py)</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parmlist</span><span class="p">,</span> <span class="n">framebuf</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parmlist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">cmdname</span> <span class="o">=</span> <span class="n">parmlist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">clsname</span> <span class="o">=</span> <span class="n">parmlist</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">cmdobj</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">clsname</span><span class="p">]()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ci</span><span class="o">.</span><span class="n">add_cmd</span><span class="p">(</span><span class="n">cmdname</span><span class="p">,</span> <span class="n">cmdobj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="ledstrip.cmdif.CmdConfig" class="doc doc-heading">
+            <code>CmdConfig</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="cmdtemplate.CommandTemplate">CommandTemplate</span></code></p>
+
+
+        <p>Provide a configuration command, to configure other commands.</p>
+<p>Some commands have configuration options. This command class provides a
+standard way to set configuration options for a command.</p>
+<p>It is invoked as <code>config,&lt;cmdname&gt;,parm1,parm2,...</code></p>
+<p>The parameters are passed through to the specified command's config handler
+if it has one. No checking is done on the actual parameters.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CmdConfig</span><span class="p">(</span><span class="n">CommandTemplate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provide a configuration command, to configure other commands.</span>
+
+<span class="sd">    Some commands have configuration options. This command class provides a</span>
+<span class="sd">    standard way to set configuration options for a command.</span>
+
+<span class="sd">    It is invoked as `config,&lt;cmdname&gt;,parm1,parm2,...`</span>
+
+<span class="sd">    The parameters are passed through to the specified command&#39;s config handler</span>
+<span class="sd">    if it has one. No checking is done on the actual parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">helpstr</span> <span class="o">=</span> <span class="s2">&quot;config,&lt;cmdname&gt;,parm1,parm2,...&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmddict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="n">cmddict</span>
+
+    <span class="c1"># this is called when parm[0]==&#39;config&#39;</span>
+    <span class="c1"># parm[1] should be the command to be conigured</span>
+    <span class="c1"># parm[2] and greater are configuration parameters, which vary depending</span>
+    <span class="c1"># on the command that is being configured</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parmlist</span><span class="p">,</span> <span class="n">framebuf</span><span class="p">):</span>
+        <span class="c1"># check that there at least one parameter, and that the specified</span>
+        <span class="c1"># command exists, and then pass to the command&#39;s config handler.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parmlist</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">cmdname</span> <span class="o">=</span> <span class="n">parmlist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">cmdname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">:</span>
+                <span class="n">cmdobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">cmdname</span><span class="p">]</span>
+                <span class="n">cmdobj</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">parmlist</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="ledstrip.cmdif.CmdHelp" class="doc doc-heading">
+            <code>CmdHelp</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="cmdtemplate.CommandTemplate">CommandTemplate</span></code></p>
+
+
+        <p>Provide a basic help command.</p>
+<p>This command class provides two commands to show help to the user. It uses
+strings that are part of the CommandTemplate as the help message.</p>
+<p>The two commands are:</p>
+<ul>
+<li><code>help</code> - show simple help message for every installed command</li>
+<li><code>help,config</code> - show configuration options for a command, if any</li>
+</ul>
+<p>The help is automatic for each command as long as the implementation
+provides a help string.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CmdHelp</span><span class="p">(</span><span class="n">CommandTemplate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provide a basic help command.</span>
+
+<span class="sd">    This command class provides two commands to show help to the user. It uses</span>
+<span class="sd">    strings that are part of the CommandTemplate as the help message.</span>
+
+<span class="sd">    The two commands are:</span>
+
+<span class="sd">    * `help` - show simple help message for every installed command</span>
+<span class="sd">    * `help,config` - show configuration options for a command, if any</span>
+
+<span class="sd">    The help is automatic for each command as long as the implementation</span>
+<span class="sd">    provides a help string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">helpstr</span> <span class="o">=</span> <span class="s2">&quot;show list of commands&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmddict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="n">cmddict</span>
+
+    <span class="k">def</span> <span class="nf">cmdhelp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show basic help messages to the user.&quot;&quot;&quot;</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Commands&quot;</span><span class="p">)</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;--------&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cmdname</span><span class="p">,</span> <span class="n">cmdobj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">cmdhelp</span> <span class="o">=</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">helpstr</span>
+            <span class="n">console_writeln</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmdname</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cmdhelp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">cfghelp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show configuration help to the user.&quot;&quot;&quot;</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Configs&quot;</span><span class="p">)</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;-------&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cmdname</span><span class="p">,</span> <span class="n">cmdobj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">cfghelp</span> <span class="o">=</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">cfgstr</span>
+            <span class="n">console_writeln</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmdname</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cfghelp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># this is called whenever parm[0]==&#39;help&#39;</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parmlist</span><span class="p">,</span> <span class="n">framebuf</span><span class="p">):</span>
+        <span class="c1"># decide if this is a regular help, or a config help, and then</span>
+        <span class="c1"># call the appropriate method to show the help to the user</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parmlist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">parmlist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;config&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cfghelp</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cmdhelp</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="ledstrip.cmdif.CmdHelp.cfghelp" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cfghelp</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Show configuration help to the user.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">cfghelp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Show configuration help to the user.&quot;&quot;&quot;</span>
+    <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Configs&quot;</span><span class="p">)</span>
+    <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;-------&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">cmdname</span><span class="p">,</span> <span class="n">cmdobj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">cfghelp</span> <span class="o">=</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">cfgstr</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmdname</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cfghelp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="ledstrip.cmdif.CmdHelp.cmdhelp" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cmdhelp</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Show basic help messages to the user.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">cmdhelp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Show basic help messages to the user.&quot;&quot;&quot;</span>
+    <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Commands&quot;</span><span class="p">)</span>
+    <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;--------&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">cmdname</span><span class="p">,</span> <span class="n">cmdobj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">cmdhelp</span> <span class="o">=</span> <span class="n">cmdobj</span><span class="o">.</span><span class="n">helpstr</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmdname</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cmdhelp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="ledstrip.cmdif.CmdInterface" class="doc doc-heading">
+            <code>CmdInterface</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>Provides methods for processing command line input.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+                <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CmdInterface</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides methods for processing command line input.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">framebuf</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="c1"># dictionary format:</span>
+        <span class="c1"># key - command name as string</span>
+        <span class="c1"># value - CommandPattern object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="s2">&quot;help&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CmdHelp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CmdConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="s2">&quot;add&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CmdAdd</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># temporary additional commands</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LedRange</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="s2">&quot;meter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LedMeter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="s2">&quot;randomog&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LedRandomOG</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="s2">&quot;random&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LedRandom</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="s2">&quot;stop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LedStop</span><span class="p">()</span>
+        <span class="c1">#</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cp</span> <span class="o">=</span> <span class="n">cmdparser</span><span class="o">.</span><span class="n">CmdParser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_framebuf</span> <span class="o">=</span> <span class="n">framebuf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmdparms</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">console_init</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">add_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmdname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cmdobj</span><span class="p">:</span> <span class="n">CommandTemplate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a new command of the specified class to the command list.</span>
+
+<span class="sd">        :param cmdname: name of the new command, must be unique from other</span>
+<span class="sd">            command names</span>
+<span class="sd">        :param cmdobj: a [CommandTemplate][ledstrip.cmdtemplate] subclass</span>
+<span class="sd">            implementing the new command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="n">cmdname</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmdobj</span>
+
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup to start running a new command.</span>
+
+<span class="sd">        This is called by the command loop whenever a complete command line is</span>
+<span class="sd">        received. It uses the input parameter list to determine if the named</span>
+<span class="sd">        command exists. If so it sets up for executing in the exec loop.</span>
+
+<span class="sd">        It send `$OK` or `$ERR` to the serial console as a reply. Any currently</span>
+<span class="sd">        running command will be canceled, even if the new command is invalid.</span>
+
+<span class="sd">        :param param_list: string list of all the command line parameters,</span>
+<span class="sd">            including the command name which is the first item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">:</span>
+            <span class="c1"># if new command is valid, schedule it to run immediately</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="n">param_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cmdparms</span> <span class="o">=</span> <span class="n">param_list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+            <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;$OK&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># if command is not valid, cancel anything in progress and</span>
+            <span class="c1"># indicate error to console</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;$ERR&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">exec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute currently scheduled command.</span>
+
+<span class="sd">        This method is called repeatedly from the run loop. It checks to see</span>
+<span class="sd">        if any command is scheduled to run, and if so calls the `render()`</span>
+<span class="sd">        method for that command. The return value determines how the command</span>
+<span class="sd">        is rescheduled. The return value is:</span>
+
+<span class="sd">        * None - do not run again</span>
+<span class="sd">        * int(0) - run again immediately</span>
+<span class="sd">        * int(N) &gt; 0 - run after N ticks have elapsed, in microseconds</span>
+
+<span class="sd">        The return value is `True` if the command was run, or `False` if not.</span>
+
+<span class="sd">        **NOTES:** if render() was called, the `True` return will cause the</span>
+<span class="sd">        LED strip to be repainted, even if the frame buffer was not updated.</span>
+<span class="sd">        Some commands do not even affect the LED status. In the future consider</span>
+<span class="sd">        a way for render() itself to indicate if a repaint is needed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check for scheduled command</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span><span class="p">:</span>
+            <span class="c1"># get the current time and compare to scheduled time</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_diff</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># time has elapsed so run the command</span>
+                <span class="n">delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmdparms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_framebuf</span><span class="p">)</span>
+                <span class="c1"># process the return from the command ...</span>
+                <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># doesnt need to run again</span>
+                <span class="k">elif</span> <span class="n">delay</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span> <span class="o">=</span> <span class="n">now</span>    <span class="c1"># run again immediately</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># schedule next run time</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_add</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>     <span class="c1"># need to repaint</span>
+
+        <span class="c1"># frame buffer was not updated so no need to repaint</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Command line processing and run loop.</span>
+
+<span class="sd">        This method is called repeatedly from the top level run loop. It</span>
+<span class="sd">        processes incoming data from the command line, calls the parser, and</span>
+<span class="sd">        dispatches commands when a complete command line is received.</span>
+
+<span class="sd">        It returns whatever `exec()` returns, which is used as a repaint signal</span>
+<span class="sd">        at the top level.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># process any new incoming characters</span>
+        <span class="n">incoming</span> <span class="o">=</span> <span class="n">console_read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">incoming</span><span class="p">:</span>
+            <span class="n">console_write</span><span class="p">(</span><span class="n">incoming</span><span class="p">)</span>     <span class="c1"># echo to console</span>
+            <span class="n">cmdargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cp</span><span class="o">.</span><span class="n">process_input</span><span class="p">(</span><span class="n">incoming</span><span class="p">)</span>
+
+            <span class="c1"># if there is a complete new command line, then setup new command</span>
+            <span class="k">if</span> <span class="n">cmdargs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">cmdargs</span><span class="p">)</span>
+
+        <span class="c1"># run existing scheduled command</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="ledstrip.cmdif.CmdInterface.add_cmd" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_cmd</span><span class="p">(</span><span class="n">cmdname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cmdobj</span><span class="p">:</span> <span class="n">CommandTemplate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adds a new command of the specified class to the command list.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>cmdname</code>
+            </td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>name of the new command, must be unique from other command names</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>cmdobj</code>
+            </td>
+            <td>
+                  <code><span title="cmdtemplate.CommandTemplate">CommandTemplate</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>a <a class="autorefs autorefs-internal" href="../cmdtemplates/#ledstrip.cmdtemplate">CommandTemplate</a> subclass implementing the new command</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmdname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cmdobj</span><span class="p">:</span> <span class="n">CommandTemplate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds a new command of the specified class to the command list.</span>
+
+<span class="sd">    :param cmdname: name of the new command, must be unique from other</span>
+<span class="sd">        command names</span>
+<span class="sd">    :param cmdobj: a [CommandTemplate][ledstrip.cmdtemplate] subclass</span>
+<span class="sd">        implementing the new command</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="n">cmdname</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmdobj</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="ledstrip.cmdif.CmdInterface.exec" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">exec</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Execute currently scheduled command.</p>
+<p>This method is called repeatedly from the run loop. It checks to see
+if any command is scheduled to run, and if so calls the <code>render()</code>
+method for that command. The return value determines how the command
+is rescheduled. The return value is:</p>
+<ul>
+<li>None - do not run again</li>
+<li>int(0) - run again immediately</li>
+<li>int(N) &gt; 0 - run after N ticks have elapsed, in microseconds</li>
+</ul>
+<p>The return value is <code>True</code> if the command was run, or <code>False</code> if not.</p>
+<p><strong>NOTES:</strong> if render() was called, the <code>True</code> return will cause the
+LED strip to be repainted, even if the frame buffer was not updated.
+Some commands do not even affect the LED status. In the future consider
+a way for render() itself to indicate if a repaint is needed.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">exec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute currently scheduled command.</span>
+
+<span class="sd">    This method is called repeatedly from the run loop. It checks to see</span>
+<span class="sd">    if any command is scheduled to run, and if so calls the `render()`</span>
+<span class="sd">    method for that command. The return value determines how the command</span>
+<span class="sd">    is rescheduled. The return value is:</span>
+
+<span class="sd">    * None - do not run again</span>
+<span class="sd">    * int(0) - run again immediately</span>
+<span class="sd">    * int(N) &gt; 0 - run after N ticks have elapsed, in microseconds</span>
+
+<span class="sd">    The return value is `True` if the command was run, or `False` if not.</span>
+
+<span class="sd">    **NOTES:** if render() was called, the `True` return will cause the</span>
+<span class="sd">    LED strip to be repainted, even if the frame buffer was not updated.</span>
+<span class="sd">    Some commands do not even affect the LED status. In the future consider</span>
+<span class="sd">    a way for render() itself to indicate if a repaint is needed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># check for scheduled command</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span><span class="p">:</span>
+        <span class="c1"># get the current time and compare to scheduled time</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_diff</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># time has elapsed so run the command</span>
+            <span class="n">delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmdparms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_framebuf</span><span class="p">)</span>
+            <span class="c1"># process the return from the command ...</span>
+            <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># doesnt need to run again</span>
+            <span class="k">elif</span> <span class="n">delay</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span> <span class="o">=</span> <span class="n">now</span>    <span class="c1"># run again immediately</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># schedule next run time</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_add</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>     <span class="c1"># need to repaint</span>
+
+    <span class="c1"># frame buffer was not updated so no need to repaint</span>
+    <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="ledstrip.cmdif.CmdInterface.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Command line processing and run loop.</p>
+<p>This method is called repeatedly from the top level run loop. It
+processes incoming data from the command line, calls the parser, and
+dispatches commands when a complete command line is received.</p>
+<p>It returns whatever <code>exec()</code> returns, which is used as a repaint signal
+at the top level.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Command line processing and run loop.</span>
+
+<span class="sd">    This method is called repeatedly from the top level run loop. It</span>
+<span class="sd">    processes incoming data from the command line, calls the parser, and</span>
+<span class="sd">    dispatches commands when a complete command line is received.</span>
+
+<span class="sd">    It returns whatever `exec()` returns, which is used as a repaint signal</span>
+<span class="sd">    at the top level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># process any new incoming characters</span>
+    <span class="n">incoming</span> <span class="o">=</span> <span class="n">console_read</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">incoming</span><span class="p">:</span>
+        <span class="n">console_write</span><span class="p">(</span><span class="n">incoming</span><span class="p">)</span>     <span class="c1"># echo to console</span>
+        <span class="n">cmdargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cp</span><span class="o">.</span><span class="n">process_input</span><span class="p">(</span><span class="n">incoming</span><span class="p">)</span>
+
+        <span class="c1"># if there is a complete new command line, then setup new command</span>
+        <span class="k">if</span> <span class="n">cmdargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">cmdargs</span><span class="p">)</span>
+
+    <span class="c1"># run existing scheduled command</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="ledstrip.cmdif.CmdInterface.setup" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">setup</span><span class="p">(</span><span class="n">param_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Setup to start running a new command.</p>
+<p>This is called by the command loop whenever a complete command line is
+received. It uses the input parameter list to determine if the named
+command exists. If so it sets up for executing in the exec loop.</p>
+<p>It send <code>$OK</code> or <code>$ERR</code> to the serial console as a reply. Any currently
+running command will be canceled, even if the new command is invalid.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>param_list</code>
+            </td>
+            <td>
+                  <code>list[str]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>string list of all the command line parameters, including the command name which is the first item.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>ledstrip/cmdif.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Setup to start running a new command.</span>
+
+<span class="sd">    This is called by the command loop whenever a complete command line is</span>
+<span class="sd">    received. It uses the input parameter list to determine if the named</span>
+<span class="sd">    command exists. If so it sets up for executing in the exec loop.</span>
+
+<span class="sd">    It send `$OK` or `$ERR` to the serial console as a reply. Any currently</span>
+<span class="sd">    running command will be canceled, even if the new command is invalid.</span>
+
+<span class="sd">    :param param_list: string list of all the command line parameters,</span>
+<span class="sd">        including the command name which is the first item.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">param_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">:</span>
+        <span class="c1"># if new command is valid, schedule it to run immediately</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmds</span><span class="p">[</span><span class="n">param_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmdparms</span> <span class="o">=</span> <span class="n">param_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sched</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;$OK&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># if command is not valid, cancel anything in progress and</span>
+        <span class="c1"># indicate error to console</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmdobj</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">console_writeln</span><span class="p">(</span><span class="s2">&quot;$ERR&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-11-10</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../add-new-patterns/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Adding New Patterns">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Adding New Patterns
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../cmdparser/" class="md-footer__link md-footer__link--next" aria-label="Next: Command Parser">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Command Parser
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright 2024 Joseph Kroesche
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.footer"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
