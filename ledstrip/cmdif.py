@@ -173,6 +173,7 @@ class CmdInterface():
         self._cmds["meter"] = LedMeter()
         self._cmds["randomog"] = LedRandomOG()
         self._cmds["random"] = LedRandom()
+        self._cmds["stop"] = LedStop()
         #
 
         self._cp = cmdparser.CmdParser()

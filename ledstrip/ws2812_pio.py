@@ -96,12 +96,10 @@ class WS2812():
         ...
 
     :param smid: state machine number to use for PIO
-    :type  smid: int
-    :param  pin: GPIO pin number to use for WS2812 signal
-    :type   pin: int
+    :param pin: GPIO pin number to use for WS2812 signal
     """
 
-    def __init__(self, smid, pin):
+    def __init__(self, smid: int, pin: int) -> None:
         """Class constructor for WS2812."""
 
         # debug pin, if needed

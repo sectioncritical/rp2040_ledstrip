@@ -19,3 +19,9 @@ This page describes the pattern commands that are implemented in the firmware.
 ## random
 
 ::: ledstrip.ledrandom
+
+*****
+
+## stop
+
+::: ledstrip.ledstop

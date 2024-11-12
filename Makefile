@@ -30,7 +30,7 @@
 # expose the filesystem.
 
 APP_FILES=console_std.py cmdclasses.py cmdtemplate.py cmdif.py cmdparser.py \
-		  ws2812_pio.py main.py ledmeter.py ledrange.py ledrandom.py
+		  ws2812_pio.py main.py ledmeter.py ledrange.py ledrandom.py ledstop.py
 SRC_DIR=ledstrip
 BUILD_DIR=build
 

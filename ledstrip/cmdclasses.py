@@ -27,3 +27,4 @@ command possible so that the user can type the class name.
 from ledmeter import LedMeter
 from ledrange import LedRange
 from ledrandom import LedRandom, LedRandomOG
+from ledstop import LedStop
