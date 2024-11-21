@@ -1,6 +1,7 @@
 
 import array
 import cmdif
+from cmdclasses import *
 
 try:
     import ws2812_pio as wspio
@@ -11,6 +12,11 @@ except ImportError:
 ws = wspio.WS2812(0, 16)
 pixels = array.array("I", [0 for _ in range(144*3)])
 ci = cmdif.CmdInterface(framebuf=pixels)
+
+turn = LedTurn(start=30, stop=0)
+ci.add_cmd("right", turn)
+turn = LedTurn(start=60, stop=90)
+ci.add_cmd("left", turn)
 
 # this is the execution loop
 # can add return/exit conditions here
