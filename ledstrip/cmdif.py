@@ -41,10 +41,18 @@ import cmdparser
 from  cmdtemplate import CommandTemplate
 from cmdclasses import *
 import time
+import gc
 
 # TODO add error return from render
 # or figure out error propagation chain exec->update->render
 # so that $OK or $ERR is correct
+
+class CmdFreeMem(CommandTemplate):
+    helpstr = "show free memory"
+    def render(self, parmlist, framebuf):
+        gc.collect()
+        freemem = gc.mem_free()
+        console_writeln(f"free mem: {freemem}")
 
 class CmdHelp(CommandTemplate):
     """Provide a basic help command.
@@ -167,6 +175,7 @@ class CmdInterface():
         self._cmds["help"] = CmdHelp(self._cmds)
         self._cmds["config"] = CmdConfig(self._cmds)
         self._cmds["add"] = CmdAdd(self)
+        self._cmds["freemem"] = CmdFreeMem()
 
         # temporary additional commands
         self._cmds["range"] = LedRange()

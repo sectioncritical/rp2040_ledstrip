@@ -1,3 +1,4 @@
 .issues/
 venv/
 __pycache__/
+site/
