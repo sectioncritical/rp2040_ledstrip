@@ -57,7 +57,7 @@ def ws2812_shifter():
     considered one at a time.
 
     First the output is driven high for a fixed period of time. This is the
-    high time regardles whether the bit is 1 or 0. Then the output is driven
+    high time regardless whether the bit is 1 or 0. Then the output is driven
     low or high depending on the bit value, for a fixed amount of time. This is
     the variable section. Finally, the output is driven low for a fixed amount
     of time. This is the low time for both high and low bit values.
@@ -107,10 +107,10 @@ class WS2812():
         #self.debug_pin.low()
 
         # create the state machine
-        ws_pin = Pin(pin, Pin.OUT)
+        self._ws_pin = Pin(pin, Pin.OUT)
         # 64 ns, divider is 8
         self._sm = rp2.StateMachine(smid, ws2812_shifter, freq=15625000,
-                          set_base=ws_pin, out_base=ws_pin)
+                          set_base=self._ws_pin, out_base=self._ws_pin)
         self._sm.active(1)
 
         # set up dma for state machine
@@ -119,6 +119,9 @@ class WS2812():
         pio_num = 0 if smid < 4 else 1
         dreq_idx = (pio_num << 3) + smid
         self.dmactrl = self._dma.pack_ctrl(size=2, inc_write=False, treq_sel=dreq_idx)
+
+    def __str__(self):
+        return f"ws2812: {self._sm}, {self._ws_pin}"
 
     def shutdown(self):
         """Halt the state machine.

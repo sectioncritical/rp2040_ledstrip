@@ -25,7 +25,7 @@
 SRC_DIR=..:../ledstrip
 
 # micropython search path. needed for running unittest under upy
-UPYPATH=~/.micropython/lib:$(shell pwd)/$(SRC_DIR)
+UPYPATH=.frozen:/usr/lib/micropython:~/.micropython/lib:$(shell pwd)/$(SRC_DIR)
 
 all: help
 
@@ -93,6 +93,7 @@ repl:
 test:
 	MICROPYPATH=$(UPYPATH) micropython test_cmdparser.py
 	MICROPYPATH=$(UPYPATH) micropython test_cmdif.py
+	MICROPYPATH=$(UPYPATH) micropython test_ledstrip.py
 
 # run target based tests
 .PHONY: picotest

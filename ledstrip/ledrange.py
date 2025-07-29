@@ -45,7 +45,18 @@ class LedRange(CommandTemplate):
     # pylint: disable=missing-class-docstring
     helpstr = "set range to color <range,start,num,r,g,b>"
 
-    def render(self, parmlist, framebuf):
+    async def run(self, parmlist):
+        # make sure we have strip to write
+        if self._strip is None:
+            return
+
+        # get the framebuffer
+        framebuf = self._strip.buf
+
+        # acquire LED strip resource lock
+        await self._strip.acquire(self)
+
+        # write the pattern to the buffer
         dot0 = int(parmlist[1])
         numdots = int(parmlist[2])
         red = int(parmlist[3])
@@ -56,4 +67,9 @@ class LedRange(CommandTemplate):
         color += blue
         for idx in range(numdots):
             framebuf[dot0+idx] = color
-        # returns None - no further calls needed
+
+        # write the pattern out
+        self._strip.show()
+
+        # release the resource and return
+        self._strip.release()

@@ -22,6 +22,3 @@ This page describes the pattern commands that are implemented in the firmware.
 
 *****
 
-## stop
-
-::: ledstrip.ledstop

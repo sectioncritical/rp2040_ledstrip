@@ -11,20 +11,23 @@
 # LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
+#
+# This file implements a stub for the "ws2812_pio" module. The real module
+# uses rp2040 hardware which is not present in a standalone micropython test
+# environment. This fake module is provided so that other modules dependent
+# on ws2812_pio and be tested.
 
-"""cmdclasses - Import all command classes so they can be easily referenced.
+# TODO: possible future improvements
+# - instrument this module to be able to verify calls from depending modules
+#   are correct
 
-Any class that implements a command is added here in the form of:
+class WS2812():
 
-``` py
-from mycommand import MyCommand
-```
+    def __init__(self, smid: int, pin: int) -> None:
+        pass
 
-This allows the class `MyCommand` to be referenced directly. It makes the `add`
-command possible so that the user can type the class name.
-"""
+    def shutdown(self):
+        pass
 
-from ledrange import LedRange
-from ledrandom import LedRandom, LedRandomOG
-from ledmeter import LedMeter
-from ledturn import LedTurn
+    def show(self, pixarray):
+        pass

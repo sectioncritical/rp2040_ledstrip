@@ -71,6 +71,7 @@ meter displays on a single LED strip.
 """
 
 from cmdtemplate import CommandTemplate
+from ledstrip import LedStrip
 
 # 8-bit integer color interpolation
 # numpixels - the number of pixels in the interpolated range
@@ -88,8 +89,8 @@ class LedMeter(CommandTemplate):
     helpstr = "meter,<pct 0-100>"
     cfgstr = "start,stop,r0,rN,g0,gN,b0,bN"
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, strip: LedStrip) -> None:
+        super().__init__(strip)
         self._start = 0
         self._stop = 0
         self._rgradient = (0, 15)
@@ -121,7 +122,15 @@ class LedMeter(CommandTemplate):
         self._stride = 1 if self._stop > self._start else -1
         self._numdots = abs(self._stop - self._start) + 1
 
-    def render(self, parmlist, framebuf):
+    # this is a one-shot display so it does not loop and does not wait
+    async def run(self, parmlist) -> None:
+        # check valid LED strip available and acquire lock
+        if self._strip is None:
+            return
+        framebuf = self._strip.buf
+        await self._strip.acquire(self)
+        # at this point we have locked access to LED strip
+
         pct = int(parmlist[1])
         litdots = ((self._numdots * pct) + 50) // 100
         for idx in range(litdots):
@@ -131,4 +140,9 @@ class LedMeter(CommandTemplate):
             framebuf[self._start + (idx*self._stride)] = (green << 16) + (red << 8) + blue
         for idx in range(litdots, self._numdots):
             framebuf[self._start + (idx*self._stride)] = 0
-        return None
+
+        # update the display
+        self._strip.show()
+
+        # clean exit
+        self._strip.release()

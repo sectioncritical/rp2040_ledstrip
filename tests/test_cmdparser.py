@@ -12,6 +12,13 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+# This test is meant to be run with a standalone micropython environment.
+# The statement below about running with regular python unittest may still
+# work but i dont test it that way any more.
+#
+# See the adjacent Makefile to see how this module is used.
+
+# DEPRECATED INSTRUCTIONS
 # Unit tests for the cmdparser.py command parser.
 #
 # To run:

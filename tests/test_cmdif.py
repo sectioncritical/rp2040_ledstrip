@@ -11,26 +11,30 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-# Unit tests for the cmdif.py command interface.
-#
-# To run:
-#     python -m unittest -v test_cmdif.py
-#
-# I recommend using a venv although this test and cmdif do not require
-# any installed packages.
-
-# Update for micropython testing. The above does not work if running unit
-# tests with micropython. See the Makefile to see how the test is set up.
-
 # TODO: figure out how to add test for the CmdAdd class.
 # right now any classes that can be added must be imported into cmdif
 # namespace. I dont know a simple way to get the test class importable into
 # cmdif without having clutter we dont want for the production code.
 
+# this is meant to be run using micropython and the mpy unittest module
+# the test is called directly because unittest module does not work when
+# invoked as a module. see the accompanying Makefile to see how the
+# test is invoked.
+#
+# It might also work using regular python with regular unittest but I have
+# not tested that.
+
+# This unit test exercises the APIs and internal logic of the "cmdif"
+# module. That module runs a command interface and dispatches commands
+
 import unittest
+import asyncio
+
 from ledstrip import cmdif
 from cmdtemplate import CommandTemplate
+from ledstrip import ledstrip
 
+# some globals used for tracking test states and events
 call_count = 0
 call_parms = None
 call_fn = ""
@@ -50,16 +54,15 @@ def reset_globals():
 class BasicCommand(CommandTemplate):
     helpstr = "basic command"
 
-    def render(self, parmlist, framebuf):
+    async def run(self, parmlist):
         global call_count
         global call_parms
         global call_fn
         global call_cmd
         call_count += 1
         call_parms = parmlist
-        call_fn = "render"
+        call_fn = "run"
         call_cmd = "basic"
-        return None
 
     def config(self, parmlist):
         global call_count
@@ -71,30 +74,62 @@ class BasicCommand(CommandTemplate):
         call_fn = "config"
         call_cmd = "basic"
 
-# repeat command, runs each time run is called
-class RepeatCommand(CommandTemplate):
-    helpstr = "repeat command"
+# long running command that loops until stopped
+class LoopingCommand(CommandTemplate):
+    helpstr = "looping command"
 
-    def render(self, parmlist, framebuf):
+    def __init__(self):
+        super().__init__()
+        self.loop_counter = 0
+        self.is_running = False
+
+    async def run(self, parmlist):
         global call_count
         global call_parms
         global call_fn
         global call_cmd
+        self.loop_counter = 0
         call_count += 1
         call_parms = parmlist
-        call_fn = "render"
-        call_cmd = "repeat"
-        return 0    # indicate should be called repeatedly
+        call_fn = "run"
+        call_cmd = "looping"
+        while not self._stoprequest:
+            self.is_running = True
+            self.loop_counter += 1
+            await asyncio.sleep(0.1)
+        self.is_running = False
 
-    def config(self, parmlist):
+# command that uses a led strip (LedStrip class)
+# use of led strip requires getting and releasing a resource lock
+# this test class is used to verify this mechanism operation
+class LedCommand(CommandTemplate):
+    helpstr = "led resource command"
+
+    def __init__(self, strip):
+        super().__init__(strip)
+        self.loop_counter = 0
+        self.is_running = False
+
+    # this run method acquires and frees the ledstrip resource lock in
+    # the same way as would be needed by an LED pattern generator that
+    # uses a pixel buffer and ws2812 strip driver
+    async def run(self, parmlist):
         global call_count
         global call_parms
         global call_fn
         global call_cmd
+        self.loop_counter = 0
         call_count += 1
         call_parms = parmlist
-        call_fn = "config"
-        call_cmd = "repeat"
+        call_fn = "run"
+        call_cmd = "led"
+        await self._strip.acquire(self)
+        while not self._stoprequest:
+            self.is_running = True
+            self.loop_counter += 1
+            await asyncio.sleep(0.1)
+        self.is_running = False
+        self._strip.release()
 
 class TestBasicAdd(unittest.TestCase):
 
@@ -102,10 +137,6 @@ class TestBasicAdd(unittest.TestCase):
         reset_globals()
         self.ci = cmdif.CmdInterface()
         self.assertTrue(self.ci)
-        # check internal state of cmdif
-        self.assertIsNone(self.ci._cmdobj)
-        self.assertIsNone(self.ci._cmdparms)
-        self.assertEqual(0, self.ci._sched)
         # get base number of built in commands
         self.numcmds = len(self.ci._cmds)
 
@@ -124,159 +155,165 @@ class TestBasicAdd(unittest.TestCase):
         cmdobj = self.ci._cmds["basic"]
         self.assertEqual(newcmd, cmdobj)
 
-class TestSetup(unittest.TestCase):
+# the following tests all call "cmdif.setup" to decode and dispatch commands
+# that are being tested. Normally setup is called from the main event loop
+# which runs as a coroutine, and all commands are dispatched using
+# asyncio.run(). therefore setup should be called from each test case as a
+# coroutine. That is the reason for async methods below and asyncio.run()
+# calls.
+#
+class TestRun(unittest.TestCase):
 
     def setUp(self):
         reset_globals()
         self.ci = cmdif.CmdInterface()
         self.assertTrue(self.ci)
-        # check internal state of cmdif
-        self.assertIsNone(self.ci._cmdobj)
-        self.assertIsNone(self.ci._cmdparms)
-        self.assertEqual(0, self.ci._sched)
         # add basic command so we can test operations on it
-        self.newcmd = BasicCommand()
-        self.ci.add_cmd("basic", self.newcmd)
+        self.basic_cmd = BasicCommand()
+        self.ci.add_cmd("basic", self.basic_cmd)
         self.assertTrue("basic" in self.ci._cmds)
         cmdobj = self.ci._cmds["basic"]
-        self.assertEqual(self.newcmd, cmdobj)
+        self.assertEqual(self.basic_cmd, cmdobj)
+        # add looping command so we can test operations on it
+        self.loop_cmd = LoopingCommand()
+        self.ci.add_cmd("looping", self.loop_cmd)
+        self.assertTrue("looping" in self.ci._cmds)
+        cmdobj = self.ci._cmds["looping"]
+        self.assertEqual(self.loop_cmd, cmdobj)
+        # create an LED strip resource to be used with following commands
+        self.strip = ledstrip.LedStrip(0, 16, 100);
+        # led LED resource using command to test lock acquire/release
+        self.led_cmd = LedCommand(self.strip)
+        self.ci.add_cmd("led", self.led_cmd)
+        self.assertTrue("led" in self.ci._cmds)
+        cmdobj = self.ci._cmds["led"]
+        self.assertEqual(self.led_cmd, cmdobj)
+        # another command instance that uses resource lock
+        self.led2_cmd = LedCommand(self.strip)
+        self.ci.add_cmd("led2", self.led2_cmd)
+        self.assertTrue("led2" in self.ci._cmds)
+        cmdobj = self.ci._cmds["led2"]
+        self.assertEqual(self.led2_cmd, cmdobj)
 
-    # verify valid command gets set up for execution
+    # verify valid command runs
+    async def async_test_setup_good(self):
+        newparms = ["basic", 1]
+        ret = self.ci.setup(newparms) # should run command as coro
+        self.assertEqual(ret, self.basic_cmd)    # verify no error on dispatch
+        self.assertEqual(call_count, 0) # verify has not run yet, before yield
+        await asyncio.sleep(0.1)  # yield, allow coro to run
+        # verify the command was run
+        self.assertEqual(call_count, 1)
+        self.assertEqual(newparms, call_parms)
+        self.assertEqual(call_fn, "run")
+        self.assertEqual(call_cmd, "basic")
+
     def test_setup_good(self):
-        newparms = ["basic", 1]
-        self.ci.setup(newparms)
-        self.assertEqual(self.newcmd, self.ci._cmdobj)
-        self.assertEqual(newparms, self.ci._cmdparms)
-        self.assertNotEqual(self.ci._sched, 0)
+        asyncio.run(self.async_test_setup_good())
 
-    # verify invalid command does not set up execution
+    # verify invalid command does not run and returns error
+    async def async_test_setup_bad(self):
+        newparms = ["foo", 1]
+        ret = self.ci.setup(newparms)
+        self.assertIsNone(ret) # error in command
+        await asyncio.sleep(0.1)
+        # verify no command was run
+        self.assertEqual(call_count, 0)
+        self.assertIsNone(call_parms)
+        self.assertEqual(call_fn, "")
+        self.assertEqual(call_cmd, "")
+
     def test_setup_bad(self):
-        newparms = ["foo", 1]
-        self.ci.setup(newparms)
-        self.assertIsNone(self.ci._cmdobj)
-        self.assertIsNone(self.ci._cmdparms)
-        self.assertEqual(0, self.ci._sched)
-
-    # verify valid command gets set up for execution, followed by bad
-    # command which undoes setup
-    def test_setup_good_then_bad(self):
-        newparms = ["basic", 1]
-        self.ci.setup(newparms)
-        self.assertEqual(self.newcmd, self.ci._cmdobj)
-        self.assertEqual(newparms, self.ci._cmdparms)
-        self.assertNotEqual(self.ci._sched, 0)
-        newparms = ["foo", 1]
-        self.ci.setup(newparms)
-        self.assertIsNone(self.ci._cmdobj)
-
-class TestExecBasic(unittest.TestCase):
-
-    def setUp(self):
-        reset_globals()
-        self.ci = cmdif.CmdInterface()
-        self.assertTrue(self.ci)
-        # check internal state of cmdif
-        self.assertIsNone(self.ci._cmdobj)
-        self.assertIsNone(self.ci._cmdparms)
-        self.assertEqual(self.ci._sched, 0)
-        # add basic command so we can test operations on it
-        self.newcmd = BasicCommand()
-        self.ci.add_cmd("basic", self.newcmd)
-        self.assertTrue("basic" in self.ci._cmds)
-        cmdobj = self.ci._cmds["basic"]
-        self.assertEqual(self.newcmd, cmdobj)
-
-    # no command is set up so nothing should happen
-    def test_exec_nocmd(self):
-        ret = self.ci.exec()
-        self.assertFalse(ret)
+        asyncio.run(self.async_test_setup_bad())
+    
+    # run looping command and verify it keeps running until stop
+    async def async_test_looping(self):
+        newparms = ["looping", 1]
+        # cmdobj is the instance of the command we invoked
+        # can use it to access internals for test purposes
+        cmdobj = self.ci.setup(newparms)
+        self.assertEqual(cmdobj, self.loop_cmd)    # verify no error on dispatch
+        # command should be running as a coro, but we have to yield
+        # allow it to run for 1 second then check some things
         self.assertEqual(call_count, 0)
-        self.assertIsNone(call_parms)
-        self.assertEqual(call_fn, "")
-        self.assertEqual(call_cmd, "")
-
-    # basic is setup, then should exec one time
-    def test_exec_basic(self):
-        newparms = ["basic", 2]
-        self.ci.setup(newparms)
-        ret = self.ci.exec()
-        # stuff should have happened
-        self.assertTrue(ret)    # need to repaint
-        # render was called
+        await asyncio.sleep(0.2) # needs to be longer than delay in "run"
+        # check normal call entry point stuff
         self.assertEqual(call_count, 1)
         self.assertEqual(newparms, call_parms)
-        self.assertEqual(call_fn, "render")
-        self.assertEqual(call_cmd, "basic")
-        # cmdobj was reset to not run again
-        self.assertIsNone(self.ci._cmdobj)
-
-        # call it again verify nothing else happened
-        ret = self.ci.exec()
-        self.assertFalse(ret)
-        # callback data is unchanged from previous
-        self.assertEqual(call_count, 1)
-        self.assertEqual(newparms, call_parms)
-        self.assertEqual(call_fn, "render")
-        self.assertEqual(call_cmd, "basic")
-
-class TestExecRepeat(unittest.TestCase):
-
-    def setUp(self):
-        reset_globals()
-        self.ci = cmdif.CmdInterface()
-        self.assertTrue(self.ci)
-        # check internal state of cmdif
-        self.assertIsNone(self.ci._cmdobj)
-        self.assertIsNone(self.ci._cmdparms)
-        self.assertEqual(self.ci._sched, 0)
-        # add basic command so we can test operations on it
-        self.newcmd = RepeatCommand()
-        self.ci.add_cmd("repeat", self.newcmd)
-        self.assertTrue("repeat" in self.ci._cmds)
-        cmdobj = self.ci._cmds["repeat"]
-        self.assertEqual(self.newcmd, cmdobj)
-
-    # no command is set up so nothing should happen
-    def test_exec_nocmd(self):
-        ret = self.ci.exec()
-        self.assertFalse(ret)
-        self.assertEqual(call_count, 0)
-        self.assertIsNone(call_parms)
-        self.assertEqual(call_fn, "")
-        self.assertEqual(call_cmd, "")
-
-    # repeat is setup, then should exec mulitple times
-    def test_exec_repeat(self):
-        newparms = ["repeat", 3]
-        self.ci.setup(newparms)
-        ret = self.ci.exec()
-        # stuff should have happened
-        self.assertTrue(ret)    # need to repaint
-        # render was called
-        self.assertEqual(call_count, 1)
-        self.assertEqual(newparms, call_parms)
-        self.assertEqual(call_fn, "render")
-        self.assertEqual(call_cmd, "repeat")
-        # cmdobj is still valid
-        self.assertIsNotNone(self.ci._cmdobj)
-
-        # call it again verify runs again
-        ret = self.ci.exec()
+        self.assertEqual(call_fn, "run")
+        self.assertEqual(call_cmd, "looping")
+        # now check that looper is running. count should increase
+        self.assertTrue(cmdobj.is_running)
+        self.assertTrue(cmdobj.loop_counter > 0)
+        # save the loop counter  to check it again
+        saved_loop_counter = cmdobj.loop_counter
+        # let it run some more
+        await asyncio.sleep(0.5)
+        # check it is still running
+        self.assertTrue(cmdobj.is_running)
+        self.assertTrue(cmdobj.loop_counter > saved_loop_counter)
+        # send stop command, wait a moment, then verify it stopped
+        newparms = ["stop", "looping"]
+        ret = self.ci.setup(newparms)
         self.assertTrue(ret)
-        # callback data is unchanged but call count is bumped
-        self.assertEqual(call_count, 2)
-        self.assertEqual(newparms, call_parms)
-        self.assertEqual(call_fn, "render")
-        self.assertEqual(call_cmd, "repeat")
+        await asyncio.sleep(0.3)
+        self.assertFalse(cmdobj.is_running)
+        saved_loop_counter = cmdobj.loop_counter
+        await asyncio.sleep(0.2)
+        self.assertEqual(saved_loop_counter, cmdobj.loop_counter)
 
-        # call it 10 more times
-        for _ in range(10):
-            ret = self.ci.exec()
-            self.assertTrue(ret)
-        self.assertEqual(call_count, 12)
+    def test_looping(self):
+        asyncio.run(self.async_test_looping())
+
+    # test "led" command which uses ledstrip resources
+    # this test validates the resource lock/release mechanism
+    # we already verify a command loop can be stopped in the above test,
+    # so this is about the handling of the ledstrip resource lock
+    async def async_test_led(self):
+        # run command and verify it is running
+        newparms = ["led", 1]
+        cmdobj = self.ci.setup(newparms)
+        self.assertEqual(cmdobj, self.led_cmd)
+        # command should be running as a coro, but we have to yield
+        # allow it to run for a few ticks then check some things
+        self.assertEqual(call_count, 0)
+        await asyncio.sleep(0.2) # needs to be longer than delay in "run"
+        # check normal call entry point stuff
+        self.assertEqual(call_count, 1)
         self.assertEqual(newparms, call_parms)
-        self.assertEqual(call_fn, "render")
-        self.assertEqual(call_cmd, "repeat")
+        self.assertEqual(call_fn, "run")
+        self.assertEqual(call_cmd, "led")
+        self.assertTrue(cmdobj.is_running)
+        # verify the resource lock on ledstrip
+        self.assertTrue(self.strip.locked())
+        self.assertEqual(self.strip._user, self.led_cmd)
+
+        # run a second command
+        reset_globals()
+        newparms = ["led2", 2]
+        cmdobj2 = self.ci.setup(newparms)
+        self.assertEqual(cmdobj2, self.led2_cmd)
+        # at this point new command is scheduled but not running
+        # verify first task is still running
+        self.assertTrue(cmdobj.is_running)
+        # and new one is not
+        self.assertFalse(cmdobj2.is_running)
+        # yielding here should cause the first task to stop and
+        # new one to start
+        await asyncio.sleep(0.2)
+        # check normal call entry point stuff
+        self.assertEqual(call_count, 1)
+        self.assertEqual(newparms, call_parms)
+        self.assertEqual(call_fn, "run")
+        self.assertEqual(call_cmd, "led")
+        self.assertFalse(cmdobj.is_running)
+        self.assertTrue(cmdobj2.is_running)
+        # verify the resource lock on ledstrip, new command should own the lock
+        self.assertTrue(self.strip.locked())
+        self.assertEqual(self.strip._user, self.led2_cmd)
+
+    def test_led(self):
+        asyncio.run(self.async_test_led())
 
 class TestConfig(unittest.TestCase):
 
@@ -284,10 +321,6 @@ class TestConfig(unittest.TestCase):
         reset_globals()
         self.ci = cmdif.CmdInterface()
         self.assertTrue(self.ci)
-        # check internal state of cmdif
-        self.assertIsNone(self.ci._cmdobj)
-        self.assertIsNone(self.ci._cmdparms)
-        self.assertEqual(self.ci._sched, 0)
         # add basic command so we can test operations on it
         self.newcmd = BasicCommand()
         self.ci.add_cmd("basic", self.newcmd)
@@ -296,21 +329,20 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(self.newcmd, cmdobj)
 
     # setup config for basic command, then exec and verify config happened
-    def test_config(self):
+    async def async_test_config(self):
         newparms = ["config", "basic", 4, 5]
-        self.ci.setup(newparms)
-        # this should cause config for basic command to be called
-        ret = self.ci.exec()
-        # config doesnt actually need repaint, but render is called so
-        # the return indication is True
+        ret = self.ci.setup(newparms)
         self.assertTrue(ret)
+        # this should cause config for basic command to be called
+        await asyncio.sleep(0.1)
         # config was called
         self.assertEqual(call_count, 1)
         self.assertEqual(newparms, call_parms)
         self.assertEqual(call_fn, "config")
         self.assertEqual(call_cmd, "basic")
-        # cmdobj was reset to not run again
-        self.assertIsNone(self.ci._cmdobj)
+
+    def test_config(self):
+        asyncio.run(self.async_test_config())
 
 if __name__ == "__main__":
     unittest.main()

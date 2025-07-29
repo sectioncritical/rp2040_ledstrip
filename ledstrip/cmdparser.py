@@ -100,7 +100,7 @@ class CmdParser():
             cmdstr = cmdline
             cmdstr = cmdstr[1:-1]  # remove terminators
             cmdargs = cmdstr.split(',')
-            # return the parsed input args
+            # return the parsed input arg
             return cmdargs
 
         return []  # bad start/stop chars, return error

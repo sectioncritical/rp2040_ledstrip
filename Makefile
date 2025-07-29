@@ -29,9 +29,19 @@
 # of this writing. And micropython does not automatically mount a drive to
 # expose the filesystem.
 
-APP_FILES=console_std.py cmdclasses.py cmdtemplate.py cmdif.py cmdparser.py \
-		  ws2812_pio.py main.py ledmeter.py ledrange.py ledrandom.py ledstop.py \
-		  ledturn.py
+APP_FILES=console_std.py    \
+          cmdclasses.py     \
+          cmdtemplate.py    \
+          cmdif.py          \
+          cmdparser.py      \
+          ws2812_pio.py     \
+          main.py           \
+          ledstrip.py       \
+          ledrange.py       \
+          ledrandom.py      \
+          ledmeter.py       \
+          ledturn.py
+
 SRC_DIR=ledstrip
 BUILD_DIR=build
 

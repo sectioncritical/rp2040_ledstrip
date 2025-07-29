@@ -17,8 +17,8 @@ class CommandTemplate():
     CommandTemplate for implementing commands.
 
     This is a base class that is used for all commands. Any command (pattern)
-    inherits from this class. If you are creating a new command or pattern, create
-    a new class using this as a base class:
+    inherits from this class. If you are creating a new command or LED pattern,
+    create a new class using this as a base class:
 
         from cmdtemplate import CommandTemplate
         ...
@@ -26,12 +26,34 @@ class CommandTemplate():
         class MyCommand(CommandTemplate):
             ...
 
-    The new command class must implement one required method `render()`. There is
-    an optional method, `config()` which is only needed if the new command has
-    configuration attributes. Each of these is documented below.
+    The new class should also be added to `cmdclasses.py` so that it will be
+    made available to the command processor code.
 
-    The new class should also be added to `cmdclasses.py` so that it will be made
-    available to the command processor code.
+    Derived classes must implement one required method `run()`. This method
+    will be invoked as a coroutine task and so must be declared `async`.  There
+    is an optional method, `config()` which is only needed if the new command
+    has configuration attributes. Each of these is documented below.
+
+    If the command is an LED pattern then at object creation you must also
+    provide an existing [LedStrip][ledstrip.ledstrip] that the command pattern
+    will use for display. If the command does not use any LED resources, then
+    no other parameters are required.
+
+    Usage:
+
+    ``` py
+    import ledstrip
+
+    from cmdclasses import MyCommand
+    # OR from cmdclasses import *
+
+    # create an instance of LED strip (hardware resource)
+    strip = ledstrip.LedStrip(0, 16, 100)
+
+    # create instance of MyCommand
+    mycommand = MyCommand(strip)
+    ...
+    ```
     """
 
     helpstr = "n/a"
@@ -44,14 +66,17 @@ class CommandTemplate():
     """Brief help for configuration parameters.
 
     This will be shown by the `$help,config` command. It should be very short
-    list of the parameters and any description.
+    list of the parameters and any description. If your command has no
+    configuration parameters, you can just use this default.
     """
 
-    #
-    def __init__(self):
-        self._delay = None
+    # if LedStrip is not provided then the command should not try to render
+    # any led strip output. this can be used for non-rendering commands like
+    # help and diagnostics
+    def __init__(self, strip: LedStrip=None) -> None:
+        self._strip = strip
+        self._stoprequest = False
 
-    #
     # cfglist - list-like of strings with config values
     # cfglist[0] is "config" and cfglist[1] is command name
     # so config parameters start with cfglist[2]
@@ -85,6 +110,8 @@ class CommandTemplate():
         *Example Implementation*
 
             def config(self, cfglist):
+                if len(cfglist) != 5: # optional sanity check
+                    return
                 # cfglist[0] is "config"
                 # cfglist[1] is "mycommand" - the name of the command
                 self.attr1 = int(cfglist[2])  # first parameter
@@ -93,21 +120,23 @@ class CommandTemplate():
                 ...
                 # possible other processing
 
-        Nothing is returned.
+        Nothing is returned and no errors are indicated.
         """
         pass
 
-    #
     # parmlist - list-like of strings with run-time parameters
     # parmlist[0] is command name
     # so command parms start with parmlist[1]
-    # framebuf - implementation specific display device but usually
-    #           a pixel array
     #
-    # returns: None - no further calls needed
-    #          0 - call again immediately to run pattern
-    #          >0 - microseconds to delay before calling again
-    def render(self, parmlist, framebuf):
+    # This method will be run as a coroutine, If it is using the led strip, it
+    # must take the resource lock at the start and release it at the end.
+    # If it has a loop, it must have a yield within the loop. For loop commands
+    # the loop must depend on `self._stoprequest` and exit (cleanly) if
+    # stoprequest becomes `True`.
+    # If must exit gracefully for all exit conditions including stoprequest or
+    # on any error condition.
+    #
+    async def run(self, parmlist: list[str]) -> None:
         """Required method to carry out the command actions.
 
         This method is called whenever the command is invoked. Any parameters
@@ -120,102 +149,133 @@ class CommandTemplate():
         command name. The first parameter from the command line is the second
         item in the list.
 
-        A pixel array named `framebuf` is passed to the method. This is an
-        array of 32-bit integers that represents the color values of a pixel.
-        Assuming RGB, then the bits in the integer are arranged like this:
+        The `run` method should carry out any actions needed for the command.
+        If the command is a one-shot, then just perform the statements in
+        sequence and return. If the command runs in a loop, or does anything
+        that takes a long time to complete, then it must have some kind of
+        coroutine yield in the loop or long-running algorithm. The most common
+        yield is a sleep, like this:
+
+            await asyncio.sleep_ms(1)
+
+        Using a 1 ms wait ensures that this coroutine will yield and let the
+        rest of the system run. The delay can obviously be longer if the loop
+        timing requires it. Most continuous running LED patterns will have a
+        loop with some kind of timing. Note that `sleep_ms()` is available in
+        micropython but not the standard python asyncio library. The "ms"
+        version is useful in an embedded system and lets us avoid using a float
+        to specify a delay time.
+
+        If the command is an LED pattern it must use the `LedStrip` in
+        `self._strip` to write to the pixel buffer. Get the buffer using the
+        property `self._strip.buf`. The pixel buffer is an array of 32-bit
+        integers that represents the color values of a pixel.  Assuming RGB,
+        then the bits in the integer are arranged like this:
 
             [31:24] - not used
             [23:16] - red value
             [15:8] - green value
             [7:0] - blue value
 
-        The `render` method should carry out any actions that are required to
-        execute the command. For example if it an LED pattern, then the method
-        should calculate how each LED should be lit and store the pixel values
-        in the `framebuf` array. `render` needs to calculate the pixel value
-        for any pixels it changes, and set the R, G, and B fields to the
-        calculated values.
+        If the command is using an LED strip, then it must also acquire the
+        LedStrip resource at the start, using `self.strip._acquire(), and
+        release it at the end. If the command runs in a loop, then it must
+        depend on the state of `self._stoprequest` and gracefully exit if
+        stoprequest it True. No matter the reason for exiting, including any
+        errors, the LED strip must be released if it was acquired earlier.
 
-        The `render` method is called using a simple scheduling process. This
-        allows for repeating or progressing patterns (a chase for example) to
-        be continually recalculated and redrawn.
+        Here is an example of a simple loop that writes some LEDs in a loop.
 
-        `render` can return three different ways:
-
-        * None - this is a one-shot command, does not need to run again
-        * 0 - call back immediately - for continuous updating at maximum rate
-        * N (where N is int>0) - N is a delay in microseconds, render will be
-          called back after that amount of time
-
-        Upon return from `render()`, the LED strip will be updated using the
-        pixel values in `framebuf`.
-
-        *Example One-Shot Command*
+        Example:
 
         ``` py
-        # command named "ledset" to turn on a single pixel
-        # "$ledset,pixnum,r,g,b"
-        #
-        def render(self, parmlist, framebuf):
-            # parmlist[0] is "ledset"
-            # should probably check for valid pixnum (not shown)
-            pixnum = int(parmlist[1])
-            # get color parameters as integers
-            red = int(parmlist[2])
-            grn = int(parmlist[3])
-            blu = int(parmlist[4])
-            # calculate the pixel value for the given color parameters
-            color = (red << 16) + (grn << 8) + blu
-            # set the specified pixel in the frame buffer
-            framebuf[pixnum] = color
+        # this command blinks some LEDs on and off. It is passed a start and
+        # ending pixel number
+        #     $simpleled,start,stop
+        async def run(self, parmlist: list[str]) -> None:
+            # check for correct number of parms, and get parm values
+            if len(parmlist) != 3:
+                return
+            start = int(parmlist[1])
+            stop = int(parmlist[2])
 
-            # this one does not need to be repeated, so return None
-            return None
+            # since we use the LED strip, we must acquire access first
+            # this will block until available
+            await self._strip.acquire(self) # must pass self as parameter
+
+            # get local variable for buffer, this will be faster in loops
+            pixelbuf = self._strip.buf
+
+            # we dont know the value in the pixel buf to start, so clear
+            # the pixels we use.
+            # normally since this is a loop it should yield but for this
+            # example it just runs through
+            for pix in range(start, stop):
+                pixelbuf[pix] = 0
+
+            # start the loop, depend on state of stoprequest
+            while not self._stoprequest:
+                # turn all the pixels on or off
+                for pix in range(start, stop):
+                    pixelbuf[pix] ^= 0x101010
+                # display the pixel buffer
+                self._strip.show()
+                # we must always yield in the forever loop
+                await asyncio.sleep_ms(200)
+
+            # loop will exit if stoprequest becomes True
+            # for our clean up we will clear the pixels we used and
+            # clear the display. then release the ledstrip resource
+            for pix in range(start, stop):
+                pixelbuf[pix] = 0
+            self._strip.show()
+            self._strip.release
+            #done
         ```
-
-        *Example Periodic Command*
-
-        ``` py
-
-        # the class needs its own variables to track state
-        def __init__():
-            super().__init__()  # get the superclass
-            self._delay = 10000  # 10 ms, overrides default of None
-            self._pixnum = 0
-            self._pixmax = 100   # could be configurable
-
-        # command named "ledrun" to cause a single pixel to "run" down the strip
-        # the lit LED will run from pixel 0 to some limit and then repeat
-        # in this example the limit is hard coded, but it could be a
-        # configurable attribute
-        # "$ledrun,r,g,b"
-        #
-        def render(self, parmlist, framebuf):
-            # parmlist[0] is "ledrun"
-            # get color parameters as integers
-            red = int(parmlist[1])
-            grn = int(parmlist[2])
-            blu = int(parmlist[3])
-            # calculate the pixel value for the given color parameters
-            color = (red << 16) + (grn << 8) + blu
-
-            # clear the last pixel that was lit
-            framebuf[self._pixnum] = 0
-
-            # advance the pixel, and set the color
-            self._pixnum += 1
-            if self._pixnum > self._pixmax:
-                self._pixnum = 0  # reset to beginning
-
-            framebuf[self._pixnum] = color  # turn on new pixel
-
-            # repeat after a fixed delay (run periodically)
-            return self._delay
-        ```
-
-
-
-
-
         """
-        return None
+        # body of the run function. if it does not use LED strip, then it
+        # can perform its function and return.
+        #
+        # if the function is continuous running, like an ongoign blink pattern,
+        # the it should monitor self._stoprequest and gracefully exit when this
+        # is True
+        #
+        # if it has any long or non-terminating loops, then it should
+        # yield with at least asyncio.sleep_ms(1). You cannot use 0 for the
+        # wait because that will not yield
+        #
+        # If the function uses the LED strip for output, then it must acquire
+        # the resource lock for the strip first, and release it at the end
+        #
+        # there must be no path where the function can exit without freeing
+        # the resource lock
+
+        # Example
+        #
+        # # get some local variable of stuff we need often
+        # pixbuf = self._strip._buf
+        #
+        # # get the resource lock (will block)
+        # self._strip.acquire(self)
+        #
+        # # some kind of run loop
+        # while ...
+        #     ... do stuff
+        #     self._strip.show()
+        #     asyncio.sleep_ms(...) # at least 1
+        #     if self._stoprequest:
+        #         ... whatever cleanup
+        #         break
+        #
+        # self._strip.release()  ## IMPORTANT
+        return
+
+    def stop(self) -> None:
+        """Request that a running command stop.
+
+        This only sets the internal `stoprequest` flag. It is up to the logic
+        in `run` to recognize the request and perform a graceful return.
+
+        Usually there is no reason for a subclass to override this method.
+        """
+        self._stoprequest = True
