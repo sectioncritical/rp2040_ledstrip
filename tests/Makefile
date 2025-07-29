@@ -29,10 +29,12 @@ UPYPATH=.frozen:/usr/lib/micropython:~/.micropython/lib:$(shell pwd)/$(SRC_DIR)
 
 all: help
 
-.PHONY: help
-help: this_help
+# venv management
+include ../python-venv.mak
 
-.PHONY: this_help
+.PHONY: help
+help: this_help venv_help
+
 this_help:
 	@echo ""
 	@echo "-------------"
@@ -63,6 +65,7 @@ this_help:
 	@echo "hosttest_basic   - run basic test of firmware"
 	@echo "hosttest_random  - run random pattern test"
 	@echo ""
+	@echo "VENV=$(VENV)"
 
 .PHONY: boards
 boards:

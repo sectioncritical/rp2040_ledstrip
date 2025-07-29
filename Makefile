@@ -50,6 +50,7 @@ UPYPATH=~/.micropython/lib:$(shell pwd)/$(SRC_DIR)
 
 all: help
 
+# venv management
 include python-venv.mak
 
 .PHONY: help
@@ -94,15 +95,15 @@ this_help:
 
 .PHONY: boards
 boards: |venv
-	@venv/bin/mpremote devs
+	@$(VENV)/bin/mpremote devs
 
 .PHONY: deploy
 deploy: | venv
-	@for f in $(APP_FILES); do venv/bin/mpremote cp $(SRC_DIR)/$$f :$$f; done
+	@for f in $(APP_FILES); do $(VENV)/bin/mpremote cp $(SRC_DIR)/$$f :$$f; done
 
 .PHONY: cleanpico
 cleanpico: | venv
-	@for f in $(APP_FILES); do venv/bin/mpremote rm :$$f; done
+	@for f in $(APP_FILES); do $(VENV)/bin/mpremote rm :$$f; done
 
 $(BUILD_DIR):
 	mkdir $@
@@ -114,29 +115,29 @@ deploy_mpy: $(APP_FILES) | venv $(BUILD_DIR)
 	for f in $(APP_FILES);                                                  \
 	do                                                                      \
 	    mpy-cross $(SRC_DIR)/$$f -o $(BUILD_DIR)/$${f%.py}.mpy;             \
-	    venv/bin/mpremote cp $(BUILD_DIR)/$${f%.py}.mpy :                   \
+	    $(VENV)/bin/mpremote cp $(BUILD_DIR)/$${f%.py}.mpy :                   \
 	done
 
 .PHONY: repl
 repl: |venv
-	venv/bin/mpremote repl
+	$(VENV)/bin/mpremote repl
 
 .PHONY: ls
 ls: |venv
-	venv/bin/mpremote ls
+	$(VENV)/bin/mpremote ls
 
 .PHONY: reset
 reset: |venv
-	venv/bin/mpremote reset
+	$(VENV)/bin/mpremote reset
 
 .PHONY: bootloader
 bootloader: |venv
-	venv/bin/mpremote bootloader
+	$(VENV)/bin/mpremote bootloader
 
 # make sure to set SERPORT to use terminal
 .PHONY: terminal
 terminal: venv
-	venv/bin/python -m serial.tools.miniterm $(SERPORT) 115200
+	$(VENV)/bin/python -m serial.tools.miniterm $(SERPORT) 115200
 
 # runs unit tests from the tests/ directory
 # see that directory for more tests
@@ -150,24 +151,24 @@ clean:
 
 .PHONY: lint
 lint: |venv
-	venv/bin/pylint --rcfile=pylintrc --enable-all-extensions ledstrip
+	$(VENV)/bin/pylint --rcfile=pylintrc --enable-all-extensions ledstrip
 
 .PHONY: docstyle
 docstyle: |venv
-	venv/bin/pydocstyle ledstrip
+	$(VENV)/bin/pydocstyle ledstrip
 
 # DOCS RELATED TARGETS
 .PHONY: docs-build
 docs-build: |venv
-	venv/bin/mkdocs build
+	$(VENV)/bin/mkdocs build
 
 .PHONY: docs-serve
 docs-serve: |venv
-	venv/bin/mkdocs serve
+	$(VENV)/bin/mkdocs serve
 
 .PHONY: gh-pages
 gh-pages: |venv
-	venv/bin/ghp-import -n -o site
+	$(VENV)/bin/ghp-import -n -o site
 
 .PHONY: docs-clean
 docs-clean:
