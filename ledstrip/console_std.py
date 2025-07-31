@@ -12,8 +12,7 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-"""
-console_std - Console IO implementation using stdin/stdout.
+"""console_std - Console IO implementation using stdin/stdout.
 
 This module implements the following functions for console IO using sys.stdin
 and sys.stdin. Select polling is used for non-blocking input.
@@ -34,7 +33,7 @@ import sys
 console_poll = None
 
 # initialize whatever we are using for serial comms
-def console_init():
+def console_init() -> None:
     """Initialize serial IO console.
 
     This should be called once at the start of the application. It performs

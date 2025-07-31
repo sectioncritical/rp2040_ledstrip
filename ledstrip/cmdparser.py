@@ -18,11 +18,11 @@
 # - consider if it needs to be more memory efficient. it creates and destroys
 #   bytearrays
 
-"""
-This module implements a simple command line processor. It is meant to be able
-to accept 1 or more bytes at a time, as they arrive from a serial port for
-example. Once a proper start and stop framing characters are seen, it returns
-all the arguments as a list of strings.
+r"""Implement a simple command line processor.
+
+It is meant to be able to accept 1 or more bytes at a time, as they arrive from
+a serial port for example. Once a proper start and stop framing characters are
+seen, it returns all the arguments as a list of strings.
 
 It is intended to be used from a main loop that is checking for serial or other
 command input. As bytes are recieved they are passed to this parser and once a
@@ -74,8 +74,10 @@ while (processing main loop):
 ```
 """
 
-class CmdParser():
-    def __init__(self):
+class CmdParser:
+    """Simple command parser for serial command lines."""
+
+    def __init__(self) -> None:
         self._buf = None
 
     # INTERNAL METHOD
@@ -87,7 +89,12 @@ class CmdParser():
     # any alpha will be converted to lower case
     # returns args as list of strings (one or more)
     # or an empty list which means there was an error
-    def parse_cmd(self, cmdline):
+    def parse_cmd(self, cmdline: str) -> int:
+        """Parse command line into parameters.
+
+        Break apart comma separate command line and return parameters as a list
+        of strings.
+        """
         # check the line start and end terminators first
         startch = cmdline[0]
         stopch = cmdline[-1]
@@ -109,7 +116,8 @@ class CmdParser():
     # inbuf is string one or more characters
     # returns None or string containing properly framed command
     # this method is separated from process_input() to make it easier to test
-    def assemble_cmd(self, inbuf):
+    def assemble_cmd(self, inbuf: str) -> str:
+        """Assemble a complete command line from incoming characters."""
         # process all incoming characters
         for ch in inbuf:
             # if it is a $ that is start of a command
@@ -134,7 +142,8 @@ class CmdParser():
     # inbuf is string, one or more characters
     # returns None or list of command line components as strings
     # empty list means there was an error
-    def process_input(self, inbuf):
+    def process_input(self, inbuf: str) -> list[str]:
+        """Process incoming characters into a command and dispatch."""
         buf = self.assemble_cmd(inbuf)
         if buf:
             return self.parse_cmd(buf)

@@ -2,13 +2,21 @@
 import asyncio
 import cmdif
 from console_std import console_writeln
-from cmdclasses import *
 from  cmdtemplate import CommandTemplate
 import ledstrip
+import ledrange
+import ledmeter
+import ledturn
+import ledrandom
 
 # TODO: figure out how to make a "customization" module or plugin that can
 # be used for each RGB pico to customize it for its unique patterns while
 # reusing all the other code
+
+"""Main entry point for the program.
+
+Configuration of the LED strips and patterns is done in this file.
+"""
 
 # provide a command to query the list of LED strips in the system
 class CmdStrips(CommandTemplate):
@@ -17,15 +25,18 @@ class CmdStrips(CommandTemplate):
     This command prints a simple table of the instantiated `ledstrip` classes
     for diagnostic purposes.
     """
+
     helpstr = "show LED strip resources"
 
     def __init__(self, ledstrips: list[ledstrip.LedStrip]) -> None:
+        """Create command to display LedStrip instances."""
         super().__init__(strip=None)
         self._strips = ledstrips
 
     async def run(self, parmlist: list[str]) -> None:
+        """List all the LedStrip instances."""
         for idx, strip in enumerate(self._strips):
-            console_writeln(f"{idx}: {str(strip)}")
+            console_writeln(f"{idx}: {strip!s}")
 
 # create the led strip instances
 strip0 = ledstrip.LedStrip(0, 16, 144)
@@ -37,19 +48,19 @@ ci = cmdif.CmdInterface()
 # create and add all the patterns used by this LED strip controller
 stripcmd = CmdStrips([strip0, strip1])
 ci.add_cmd("strips", stripcmd)
-range0 = LedRange(strip0)
+range0 = ledrange.LedRange(strip0)
 ci.add_cmd("range0", range0)
-range1 = LedRange(strip1)
+range1 = ledrange.LedRange(strip1)
 ci.add_cmd("range1", range1)
-random = LedRandom(strip0)
+random = ledrandom.LedRandom(strip0)
 ci.add_cmd("random", random)
-randomog = LedRandomOG(strip1)
+randomog = ledrandom.LedRandomOG(strip1)
 ci.add_cmd("randomog", randomog)
-leftturn = LedTurn(strip=strip0, start=0, stop=30)
+leftturn = ledturn.LedTurn(strip=strip0, start=0, stop=30)
 ci.add_cmd("left", leftturn)
-rightturn = LedTurn(strip=strip1, start=0, stop=30)
+rightturn = ledturn.LedTurn(strip=strip1, start=0, stop=30)
 ci.add_cmd("right", rightturn)
-meter = LedMeter(strip0)
+meter = ledmeter.LedMeter(strip0)
 ci.add_cmd("meter", meter)
 
 # start up command interface loop as main coroutine loop

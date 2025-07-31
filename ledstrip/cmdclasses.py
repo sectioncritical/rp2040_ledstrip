@@ -12,6 +12,8 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+# ruff: noqa: F401
+
 """cmdclasses - Import all command classes so they can be easily referenced.
 
 Any class that implements a command is added here in the form of:

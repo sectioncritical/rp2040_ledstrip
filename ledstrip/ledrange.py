@@ -45,7 +45,7 @@ class LedRange(CommandTemplate):
     # pylint: disable=missing-class-docstring
     helpstr = "set range to color <range,start,num,r,g,b>"
 
-    async def run(self, parmlist):
+    async def run(self, parmlist: list[str]) -> None:
         # make sure we have strip to write
         if self._strip is None:
             return

@@ -39,7 +39,7 @@ class LedRandomOG(CommandTemplate):
 
     # def config(self, cfglist):
 
-    async def run (self, parmlist):
+    async def run (self, parmlist: list[str]) -> None:
         # this is a rewriting of Bill's underhoodLights algorithm for
         # pattern 2. The code looks different but the outcome should be the
         # same or simimlar.
@@ -140,7 +140,7 @@ class LedRandom(CommandTemplate):
     helpstr = "show random colors"
     cfgstr = "dark-threshold(0-255),max-intensity(0-255),num-pixels,delay_us"
 
-    chooser = [0x0000FF, 0x00FF00, 0x00FFFF,
+    chooser = [0x0000FF, 0x00FF00, 0x00FFFF,            # noqa: RUF012
                0xFF0000, 0xFF00FF, 0xFFFF00, 0xFFFFFF]
 
     def __init__(self, strip: LedStrip) -> None:
@@ -165,7 +165,7 @@ class LedRandom(CommandTemplate):
             self._max_pixels = int(cfglist[4])
             self._delay = int(cfglist[5])
 
-    async def run(self, parmlist):
+    async def run(self, parmlist: list[str]) -> None:
         # check valid LED strip available and acquire lock
         if self._strip is None:
             return

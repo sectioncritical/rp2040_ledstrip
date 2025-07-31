@@ -21,11 +21,17 @@
 # This module implements a driver for WS2812-based LED strips. It uses the
 # RP2040 hardware PIO module to bit-bang the protocol.
 #
+"""Provides a WS2812 LED driver for an RP2040 (Pico) microcontroller.
 
+Utilizes the PIO hardware, and DMA to perform transfers from the pixel buffer
+to the PIO output FIFO.
+"""
+
+# ruff: noqa: F821
+
+import array
 import rp2
 from machine import Pin
-import array
-import time
 
 # Timing for the ws2812 serial protocol. We use 3 time segments. It is high
 # during the T1, then high or low during T2 depending on the bit value, then
@@ -38,7 +44,7 @@ import time
 
 @rp2.asm_pio(set_init=rp2.PIO.OUT_LOW, out_init=rp2.PIO.OUT_LOW,
              fifo_join=rp2.PIO.JOIN_TX)
-def ws2812_shifter():
+def ws2812_shifter() -> None:
     """Shift 24-bit LED values to a GPIO per the WS2812 protocol.
 
     *This is not a callable function.*
@@ -76,7 +82,7 @@ def ws2812_shifter():
     jmp(not_osre, "more_bits")  # repeat until all 24 bits are shifted
     wrap()                      # back to top for next pixel value
 
-class WS2812():
+class WS2812:
     """PIO drive for WS2812-based LED strips.
 
     Provides a class that uses the Raspberry Pico RP20204 PIO to implement a
@@ -101,7 +107,6 @@ class WS2812():
 
     def __init__(self, smid: int, pin: int) -> None:
         """Class constructor for WS2812."""
-
         # debug pin, if needed
         #self.debug_pin = Pin(23, Pin.OUT)
         #self.debug_pin.low()
@@ -120,10 +125,10 @@ class WS2812():
         dreq_idx = (pio_num << 3) + smid
         self.dmactrl = self._dma.pack_ctrl(size=2, inc_write=False, treq_sel=dreq_idx)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"ws2812: {self._sm}, {self._ws_pin}"
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """Halt the state machine.
 
         This will stop the state machine from running. Once this method is
@@ -131,7 +136,7 @@ class WS2812():
         """
         self._sm.active(0)
 
-    def show(self, pixarray):
+    def show(self, pixarray: array.array) -> None:
         """Send pixel data to ws2812 GPIO pin.
 
         Copies an array of pixel data to the WS2812 PIO driver. The pixel data
@@ -162,4 +167,3 @@ class WS2812():
             pass
 
         #self.debug_pin.low()
-        #time.sleep_us(100)  # might need this to ensure frame timing gap

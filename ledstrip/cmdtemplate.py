@@ -12,9 +12,12 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-class CommandTemplate():
-    """
-    CommandTemplate for implementing commands.
+"""Base class for implementing commands."""
+
+import ledstrip
+
+class CommandTemplate:
+    """CommandTemplate for implementing commands.
 
     This is a base class that is used for all commands. Any command (pattern)
     inherits from this class. If you are creating a new command or LED pattern,
@@ -73,7 +76,7 @@ class CommandTemplate():
     # if LedStrip is not provided then the command should not try to render
     # any led strip output. this can be used for non-rendering commands like
     # help and diagnostics
-    def __init__(self, strip: LedStrip=None) -> None:
+    def __init__(self, strip: ledstrip.LedStrip=None) -> None:
         self._strip = strip
         self._stoprequest = False
 
@@ -82,7 +85,7 @@ class CommandTemplate():
     # so config parameters start with cfglist[2]
     #
     def config(self, cfglist: list[str]) -> None:
-        """Optional method for configuring the command.
+        """Configure options for a command (optional method).
 
         This method is used if the command has any configurable attributes. If
         the command has nothing to configure, then this does not need to be
@@ -137,7 +140,7 @@ class CommandTemplate():
     # on any error condition.
     #
     async def run(self, parmlist: list[str]) -> None:
-        """Required method to carry out the command actions.
+        """Execute and carry out command actions (required method).
 
         This method is called whenever the command is invoked. Any parameters
         are passed in as a list. For example:
@@ -187,7 +190,6 @@ class CommandTemplate():
         Here is an example of a simple loop that writes some LEDs in a loop.
 
         Example:
-
         ``` py
         # this command blinks some LEDs on and off. It is passed a start and
         # ending pixel number
@@ -232,6 +234,7 @@ class CommandTemplate():
             self._strip.release
             #done
         ```
+
         """
         # body of the run function. if it does not use LED strip, then it
         # can perform its function and return.

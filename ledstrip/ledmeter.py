@@ -80,12 +80,51 @@ from ledstrip import LedStrip
 #
 # returns interpolated 8-bit color value
 #
-def interpolate_color(numpixels, pixel, gradient):
+def interpolate_color(numpixels: int, pixel: int, gradient: tuple[int, int]) -> int:
+    """Interpolate the color of a pixel in a range, based on a gradient.
+
+    Given an LED section of a certain number of pixels, and the color at the
+    start and end of the section are defined. This method determines the color
+    of intermediate pixels as a gradient.
+
+    This operates on a single color at a time. For example, red. If you want to
+    support multiple colors (RGB for example), then you must call this for each
+    color in the gradient.
+
+    :param numpixels: number of pixels in the interpolated range
+    :param pixel: index of the pixel to interpolate (0-N)
+    :param gradient: a tuple (start, end) with the color values at the start
+        and end of the pixel range (0-255)
+    :return: interpolated 8-bit color value
+    """
     totaldiff = gradient[1] - gradient[0]
     pctdiff = ((pixel * 1000) * totaldiff) // (numpixels * 1000)
     return gradient[0] + pctdiff
 
 class LedMeter(CommandTemplate):
+    """Command to display a variable color 'meter' over a range of pixels.
+
+    This pattern is meant to show a 'meter' over a range of LEDs, such as a
+    battery level meter or a power meter. A range of pixels is defined with a
+    start and stop pixel. A fixed color is specified for each end. Then when
+    the pattern is invoked through the `run()` method, a percentage of the LEDs
+    are lit, and the color is interpolated from the start to the stop. For
+    example, if there are 10 LEDs defined (pixels 0 - 9), and the color at the
+    start is all red, and all green at the stop. Then if 50% meter level is
+    commanded, 5 LEDs will light. The lowest will be red (as at the start), and
+    each successive LED will be colored slight more to the green. By the middle
+    LED it will be yellow. If a higher percentage is commanded, then the LED
+    color will approach green near the top of the range.
+
+    If you do not want a color gradient, then just specify the same color at
+    the start and the stop.
+
+    The configuration of the start, stop, and colors is done using the
+    `config()` method.
+
+    :param strip: an `LedStrip` instance to be used for the meter pattern.
+    """
+
     helpstr = "meter,<pct 0-100>"
     cfgstr = "start,stop,r0,rN,g0,gN,b0,bN"
 
@@ -113,7 +152,7 @@ class LedMeter(CommandTemplate):
     # 8 - starting b (the r value at start pixel)
     # 9 - ending b   (the r value at stop pixel)
     #
-    def config(self, cfglist):
+    def config(self, cfglist: list[str]) -> None:
         self._start = int(cfglist[2])
         self._stop = int(cfglist[3])
         self._rgradient = (int(cfglist[4]), int(cfglist[5]))
@@ -123,7 +162,7 @@ class LedMeter(CommandTemplate):
         self._numdots = abs(self._stop - self._start) + 1
 
     # this is a one-shot display so it does not loop and does not wait
-    async def run(self, parmlist) -> None:
+    async def run(self, parmlist: list[str]) -> None:
         # check valid LED strip available and acquire lock
         if self._strip is None:
             return
@@ -137,7 +176,8 @@ class LedMeter(CommandTemplate):
             red  = interpolate_color(self._numdots, idx, self._rgradient)
             green = interpolate_color(self._numdots, idx, self._ggradient)
             blue = interpolate_color(self._numdots, idx, self._bgradient)
-            framebuf[self._start + (idx*self._stride)] = (green << 16) + (red << 8) + blue
+            framebuf[self._start + (idx*self._stride)] = ((green << 16) +
+                                                          (red << 8) + blue)
         for idx in range(litdots, self._numdots):
             framebuf[self._start + (idx*self._stride)] = 0
 

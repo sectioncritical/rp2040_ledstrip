@@ -21,7 +21,8 @@ class LedTurn(CommandTemplate):
     helpstr = "turn signal chaser"
     cfgstr = "start,stop,r,g,b,delay_ms"
 
-    def __init__(self, strip: LedStrip, start=0, stop=30, red=64, grn=0, blu=0, delay=0):
+    def __init__(self, strip: LedStrip, start: int=0, stop: int=30,
+                 red: int=64, grn: int=0, blu: int=0, delay: int=0) -> None:
         super().__init__(strip)
         # configurables
         self._start = int(start)
@@ -42,7 +43,7 @@ class LedTurn(CommandTemplate):
     # 5 - green color (0-255)
     # 6 - blue color (0-255)
     # 7 - delay in milliseconds
-    def config(self, cfglist):
+    def config(self, cfglist: list[str]) -> None:
         self._start = int(cfglist[2])
         self._stop = int(cfglist[3])
         self._color = ((int(cfglist[4]) << 16)
@@ -54,7 +55,7 @@ class LedTurn(CommandTemplate):
         self._on = True
 
     # this is basically a chase
-    async def run(self, parmlist) -> None:
+    async def run(self, parmlist: list[str]) -> None:
         # check valid LED strip available and acquire lock
         if self._strip is None:
             return

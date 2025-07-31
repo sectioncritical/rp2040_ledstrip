@@ -12,8 +12,7 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-"""
-cmdif - Command Interface Processor.
+"""cmdif - Command Interface Processor.
 
 This module implements a command interface for receiving commands from a
 console, processing, the command, and printing results. Commands are
@@ -39,11 +38,9 @@ output.
 
 import asyncio
 from collections import OrderedDict
-from console_std import *
+from console_std import console_init, console_writeln, console_write, console_read
 import cmdparser
 from  cmdtemplate import CommandTemplate
-from cmdclasses import *
-import time
 import gc
 
 # TODO error handling for run/setup is not robust
@@ -55,8 +52,11 @@ class CmdFreeMem(CommandTemplate):
     free memory. This can be used for diagnostic purposes to evaluate how
     much memory resource is being used by the program.
     """
+
     helpstr = "show free memory"
+
     async def run(self, parmlist: list[str]) -> None:
+        """Print the amount of free memory."""
         gc.collect()
         freemem = gc.mem_free() # type: ignore[attr-defined]
         console_writeln(f"free mem: {freemem}")
@@ -75,9 +75,11 @@ class CmdHelp(CommandTemplate):
     The help is automatic for each command as long as the implementation
     provides a help string.
     """
+
     helpstr = "show list of commands"
 
     def __init__(self, cmddict: dict) -> None:
+        """Create instance of help command."""
         super().__init__()
         self._dict = cmddict
 
@@ -101,6 +103,7 @@ class CmdHelp(CommandTemplate):
 
     # this is called whenever parm[0]=='help'
     async def run(self, parmlist: list[str]) -> None:
+        """Print command summary to the console."""
         # decide if this is a regular help, or a config help, and then
         # call the appropriate method to show the help to the user
         if len(parmlist) == 2 and parmlist[1] == "config":
@@ -119,9 +122,11 @@ class CmdConfig(CommandTemplate):
     The parameters are passed through to the specified command's config handler
     if it has one. No checking is done on the actual parameters.
     """
+
     helpstr = "config,<cmdname>,parm1,parm2,..."
 
     def __init__(self, cmddict: dict) -> None:
+        """Create instance of config command."""
         super().__init__()
         self._dict = cmddict
 
@@ -130,6 +135,7 @@ class CmdConfig(CommandTemplate):
     # parm[2] and greater are configuration parameters, which vary depending
     # on the command that is being configured
     async def run(self, parmlist: list[str]) -> None:
+        """Update configurable parameters for specified command."""
         # check that there at least one parameter, and that the specified
         # command exists, and then pass to the command's config handler.
         if len(parmlist) >= 3:
@@ -151,15 +157,18 @@ class CmdStop(CommandTemplate):
 
     It is invoked as `stop,<cmdname>`
     """
+
     helpstr = "stop,<cmdname>"
 
     def __init__(self, cmddict: dict) -> None:
+        """Create instance of stop command."""
         super().__init__()
         self._dict = cmddict
 
     # this is called when parm[0]=='stop'
     # parm[1] should be the command to be stop
     async def run(self, parmlist: list[str]) -> None:
+        """Request specified command to stop itself."""
         # check that there at least one parameter, and that the specified
         # command exists, and then pass to the command's config handler.
         if len(parmlist) >= 2:
@@ -205,9 +214,11 @@ class CmdStop(CommandTemplate):
 #            cmdobj = globals()[clsname]()
 #            self._ci.add_cmd(cmdname, cmdobj)
 
-class CmdInterface():
+class CmdInterface:
     """Provides methods for processing command line input."""
+
     def __init__(self) -> None:
+        """Instantiate the command interface (one per system)."""
         self._cmds: OrderedDict = OrderedDict()
         # dictionary format:
         # key - command name as string
@@ -229,7 +240,7 @@ class CmdInterface():
         console_init()
 
     def add_cmd(self, cmdname: str, cmdobj: CommandTemplate) -> None:
-        """Adds a new command of the specified class to the command list.
+        """Add a new command of the specified class to the command list.
 
         :param cmdname: name of the new command, must be unique from other
             command names
@@ -239,7 +250,7 @@ class CmdInterface():
         self._cmds[cmdname] = cmdobj
 
     def setup(self, param_list: list[str]) -> CommandTemplate:
-        """Setup to start running a new command.
+        """Start running a new command.
 
         This is called by the command loop whenever a complete command line is
         received. It uses the input parameter list to determine if the named
@@ -258,7 +269,7 @@ class CmdInterface():
         if param_list[0] in self._cmds:
             # if new command is valid, schedule it to run immediately
             cmdobj = self._cmds[param_list[0]]
-            asyncio.create_task(cmdobj.run(param_list))
+            asyncio.create_task(cmdobj.run(param_list)) # noqa: RUF006
             console_writeln("$OK")
             return cmdobj
         elif param_list[0] == "exit":

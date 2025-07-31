@@ -54,11 +54,11 @@ class LedStrip:
     def __init__(self, smid: int, pin: int, numpixels: int) -> None:
         self._buf = array.array("I", [0 for _ in range(numpixels * 3)])
         self._numpixels = numpixels
-        self._pio = ws = wspio.WS2812(smid, pin)
+        self._pio = wspio.WS2812(smid, pin)
         self._lock = asyncio.Lock()
         self._user = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"sm: {self._pio}, lock: {self._lock.locked()}, user: {self._user}"
 
     @property
