@@ -1,0 +1,19 @@
+[tool.ruff]
+output-format="junit"
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "UP",       # pyupgrade
+    "ANN",      # flake8 annotations
+    "B",        # flake8 bugbear
+    "SIM",      # flake8 simplify
+    "PERF",     # flake8 perflint
+    "RUF",      # ruff rules
+    "D",        # pydocstyle
+]
+ignore = [
+    "D105",     # undocumented-magic-method
+    "D107",     # missing-docstring-in-init
+]
