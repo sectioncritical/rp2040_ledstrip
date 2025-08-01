@@ -1,0 +1,24 @@
+# This container is a base image with all the tools we need to build
+# everything else, so that we only have to fetch and update/upgrade
+# install tools once, and then this image can be tagged and saved.
+
+# base layer with all the build tools
+FROM docker.io/library/debian:bookworm-slim
+RUN apt update              \
+    && apt upgrade -y       \
+    && apt install -y       \
+        binutils            \
+        build-essential     \
+        curl                \
+        git                 \
+        gnupg               \
+        libffi-dev          \
+        pkg-config          \
+        python3             \
+        python3-pip         \
+        python3-venv        \
+    && apt autoremove --purge \
+    && apt clean            \
+    && rm -rf /var/lib/apt/lists/*
+
+CMD ["/bin/bash"]

@@ -1,0 +1,80 @@
+# This container provides micropython for unit tests and code quality
+# tools. It is meant to be useful for CI for this project.
+
+# it uses a local "toolbase" image which should have already been built
+
+# Layer for git-cliff tool
+
+FROM localhost/python-toolbase AS gitcliff
+
+# add git-cliff tool for generating changelogs
+# binary is downloaded from github
+RUN mkdir git-cliff \
+    && cd git-cliff \
+    && curl -OL https://github.com/orhun/git-cliff/releases/download/v0.4.2/git-cliff-0.4.2-x86_64-unknown-linux-gnu.tar.gz \
+    && curl -OL https://github.com/orhun/git-cliff/releases/download/v0.4.2/git-cliff-0.4.2-x86_64-unknown-linux-gnu.tar.gz.sig \
+    && curl -OL https://github.com/orhun/git-cliff/releases/download/v0.4.2/git-cliff-0.4.2-x86_64-unknown-linux-gnu.tar.gz.sha512 \
+    && gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys 1D2D410A741137EBC544826F4A92FA17B6619297 \
+    && gpg --verify git-cliff-0.4.2-x86_64-unknown-linux-gnu.tar.gz.sig \
+    && sha512sum --check git-cliff-0.4.2-x86_64-unknown-linux-gnu.tar.gz.sha512 \
+    && tar -zxvf git-cliff-0.4.2-x86_64-unknown-linux-gnu.tar.gz \
+    && cp git-cliff-0.4.2/git-cliff /usr/local/bin/. \
+    && cd .. \
+    && rm -rf git-cliff \
+    && strip /usr/local/bin/git-cliff
+
+# layer to build micropython from source
+FROM localhost/python-toolbase AS micropython
+
+# download micropython source release package and build it
+RUN mkdir mpy               \
+    && cd mpy               \
+    && curl -OL https://github.com/micropython/micropython/releases/download/v1.25.0/micropython-1.25.0.tar.xz  \
+    && tar -xf micropython-1.25.0.tar.xz \
+    && cd micropython-1.25.0 \
+    && cd ports/unix        \
+    && make                 \
+    && cp build-standard/micropython /usr/local/bin/. \
+    && strip /usr/local/bin/micropython
+
+# pre-install the unittest module
+RUN /usr/local/bin/micropython -m mip install --target /usr/lib/micropython unittest
+
+# layer to add python venv used by tools
+from localhost/python-toolbase AS venv
+
+COPY requirements.txt /project/requirements.txt
+COPY python-venv.mak /project/python-venv.mak
+RUN cd /project && make -f python-venv.mak venv && cd / && rm -rf /project
+
+# This is the image with micropython and tools used by CI
+
+FROM docker.io/library/debian:bookworm-slim
+WORKDIR /project
+
+# final tools image
+RUN apt update              \
+    && apt upgrade -y       \
+    && apt install -y       \
+        curl                \
+        git                 \
+        make                \
+        python3             \
+        python3-pip         \
+        python3-venv        \
+        unzip zip           \
+    && apt autoremove --purge \
+    && apt clean            \
+    && rm -rf /var/lib/apt/lists/*
+
+# copy the git-cliff utility from the earlier image
+COPY --from=gitcliff /usr/local/bin/git-cliff /usr/local/bin/.
+
+# copy micropython
+COPY --from=micropython /usr/local/bin/micropython /usr/local/bin/.
+COPY --from=micropython /usr/lib/micropython/. /usr/lib/micropython
+
+# copy the virtual environment
+COPY --from=venv /root/.cache /root/.cache
+
+CMD ["/bin/bash"]
