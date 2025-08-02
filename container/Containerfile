@@ -5,7 +5,7 @@
 
 # Layer for git-cliff tool
 
-FROM localhost/python-toolbase AS gitcliff
+FROM python-toolbase AS gitcliff
 
 # add git-cliff tool for generating changelogs
 # binary is downloaded from github
@@ -24,7 +24,7 @@ RUN mkdir git-cliff \
     && strip /usr/local/bin/git-cliff
 
 # layer to build micropython from source
-FROM localhost/python-toolbase AS micropython
+FROM python-toolbase AS micropython
 
 # download micropython source release package and build it
 RUN mkdir mpy               \
@@ -41,7 +41,7 @@ RUN mkdir mpy               \
 RUN /usr/local/bin/micropython -m mip install --target /usr/lib/micropython unittest
 
 # layer to add python venv used by tools
-from localhost/python-toolbase AS venv
+FROM python-toolbase AS venv
 
 COPY requirements.txt /project/requirements.txt
 COPY python-venv.mak /project/python-venv.mak

@@ -30,6 +30,9 @@ GITHUB_USERNAME?=$(USERNAME)
 # project files. Override this with the actual location of your project.
 PROJECT_ROOT?=$(CURDIR)/..
 
+# define to the container tool to use, podman or docker
+DOCKER?=podman
+
 TAG=micropython-build
 FULLTAG=$(TAG):latest
 REMOTE_TAG=ghcr.io/$(ORGNAME)/$(FULLTAG)
@@ -48,29 +51,31 @@ help:
 	@echo "images      - list local images"
 	@echo "containers  - list local containers"
 	@echo ""
+	@echo "Container Tool: $(DOCKER)"
+	@echo ""
 
 .PHONY: build
 build:
-	podman build -t python-toolbase -f Containerfile-toolbase .
-	podman build -t $(TAG) -f Containerfile ..
-	podman tag $(FULLTAG) $(REMOTE_TAG)
+	$(DOCKER) build -t python-toolbase -f Containerfile-toolbase .
+	$(DOCKER) build -t $(TAG) -f Containerfile ..
+	$(DOCKER) tag $(FULLTAG) $(REMOTE_TAG)
 
 .PHONY: login
 login:
-	podman login -u $(GITHUB_USERNAME) ghcr.io
+	$(DOCKER) login -u $(GITHUB_USERNAME) ghcr.io
 
 .PHONY: push
 push:
-	podman push $(REMOTE_TAG)
+	$(DOCKER) push $(REMOTE_TAG)
 
 .PHONY: containers
 containers:
-	podman container list --all
+	$(DOCKER) container list --all
 
 .PHONY: images
 images:
-	podman image list --all
+	$(DOCKER) image list --all
 
 .PHONY: run
 run:
-	cd $(PROJECT_ROOT); podman run -it -v $$(pwd):/project $(TAG) /bin/bash
+	cd $(PROJECT_ROOT); $(DOCKER) run -it -v $$(pwd):/project $(TAG) /bin/bash
