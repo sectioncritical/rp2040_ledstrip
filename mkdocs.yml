@@ -7,7 +7,6 @@ theme:
   name: material
   locale: en
   navigation_depth: 2
-  custom_dir: theme/
   palette:
     scheme: slate
   features:
