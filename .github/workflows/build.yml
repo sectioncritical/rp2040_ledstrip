@@ -1,0 +1,22 @@
+name: rp2040_ledstrip
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: micropython-build
+
+    steps:
+      - name: Initial Checkout
+        uses: actions/checkout@v4
+      - run: echo "hello from action"
+      - run: echo "working directory"
+      - run: pwd
+      - run: touch actions-was-here
+      - run: make help
+      - name: artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: the_artifact
+          path: ./actions-was-here
