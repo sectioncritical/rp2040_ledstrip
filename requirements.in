@@ -9,5 +9,6 @@ nodeenv
 ruff
 mypy
 pylint
+junit2html
 #pydocstyle
 #pycodesyle

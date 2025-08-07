@@ -137,7 +137,7 @@ bootloader: |venv
 
 # make sure to set SERPORT to use terminal
 .PHONY: terminal
-terminal: venv
+terminal: |venv
 	$(VENV)/bin/python -m serial.tools.miniterm $(SERPORT) 115200
 
 # runs unit tests from the tests/ directory
@@ -150,9 +150,29 @@ test:
 clean:
 	rm -rf $(BUILD_DIR)
 
+.PHONY: ruff
+ruff: reports/ruff-report.html
+
+reports:
+	mkdir -p $@
+
 .PHONY: lint
-lint: |venv
-	$(VENV)/bin/pylint --rcfile=pylintrc --enable-all-extensions ledstrip
+lint: |venv reports
+	$(VENV)/bin/ruff check ledstrip
+	$(VENV)/bin/ruff check --output-format=junit ledstrip > reports/ruff-report.junit
+	$(VENV)/bin/junit2html reports/ruff-report.junit reports/
+	#$(VENV)/bin/pylint --rcfile=pylintrc --enable-all-extensions ledstrip
+
+reports/ruff-report.html: reports/ruff-report.junit | venv
+	$(VENV)/bin/junit2html $^ $@
+
+reports/ruff-report.junit: | venv reports
+	-$(VENV)/bin/ruff check ledstrip
+	-$(VENV)/bin/ruff check --output-format=junit ledstrip > $@
+
+.PHONY: clean-reports
+clean-reports:
+	rm -rf reports
 
 .PHONY: docstyle
 docstyle: |venv
