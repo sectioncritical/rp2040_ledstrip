@@ -1,5 +1,5 @@
 [tool.ruff]
-output-format="junit"
+#output-format="junit"
 
 [tool.ruff.lint]
 select = [
