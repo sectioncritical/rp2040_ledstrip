@@ -71,6 +71,7 @@ this_help:
 	@echo "repl        - enter repl of target using rshell"
 	@echo "ls          - list files on target"
 	@echo "reset       - reset the target"
+	@echo "cleanpico   - delete app files from target"
 	@echo "bootloader  - put device in bootloader mode (for upython updating)"
 	@echo ""
 	@echo "terminal    - open serial terminal using miniterm (SERPORT)"

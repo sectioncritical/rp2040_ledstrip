@@ -10,6 +10,7 @@ import ledstrip
 # be used for each RGB pico to customize it for its unique patterns while
 # reusing all the other code
 
+# TODO move this to its own file
 # provide a command to query the list of LED strips in the system
 class CmdStrips(CommandTemplate):
     """Display table of LED strips..

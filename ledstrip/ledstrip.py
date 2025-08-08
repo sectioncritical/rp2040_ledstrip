@@ -52,11 +52,13 @@ class LedStrip:
     """
 
     def __init__(self, smid: int, pin: int, numpixels: int) -> None:
-        self._buf = array.array("I", [0 for _ in range(numpixels * 3)])
+        self._buf = array.array("I", [0 for _ in range(numpixels)])
         self._numpixels = numpixels
         self._pio = ws = wspio.WS2812(smid, pin)
         self._lock = asyncio.Lock()
         self._user = None
+        # prebind the pio show method - thanks chatgpt!
+        self.pio_show = self._pio.show
 
     def __str__(self):
         return f"sm: {self._pio}, lock: {self._lock.locked()}, user: {self._user}"
@@ -104,4 +106,4 @@ class LedStrip:
 
     def show(self) -> None:
         """Repaint the strip with the current buffer contents."""
-        self._pio.show(self._buf)
+        self.pio_show(self._buf)

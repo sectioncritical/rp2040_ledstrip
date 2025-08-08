@@ -52,10 +52,14 @@ class LedRandomOG(CommandTemplate):
         await self._strip.acquire(self)
         # at this point we have locked access to LED strip
 
+        # figure out highest pixel number so we dont exceed array
+        max_lit_pixels = 5
+        max_pixel_num = (len(framebuf) - 1) - max_lit_pixels
+
         while not self._stoprequest:
             # determine random elements
             colorChooser = randint(0, 100)
-            startPixel = randint(0, 410)
+            startPixel = randint(0, max_pixel_num)
             numPixels = randint(1, 5)
             grn = randint(20, 255) << 16
             red = randint(20, 255) << 8
