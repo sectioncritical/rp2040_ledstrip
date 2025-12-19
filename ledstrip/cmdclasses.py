@@ -28,3 +28,4 @@ from ledrange import LedRange
 from ledrandom import LedRandom, LedRandomOG
 from ledmeter import LedMeter
 from ledturn import LedTurn
+from ledbrake import LedBrake, LedBrakeHard

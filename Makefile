@@ -40,7 +40,8 @@ APP_FILES=console_std.py    \
           ledrange.py       \
           ledrandom.py      \
           ledmeter.py       \
-          ledturn.py
+          ledturn.py        \
+          ledbrake.py
 
 SRC_DIR=ledstrip
 BUILD_DIR=build

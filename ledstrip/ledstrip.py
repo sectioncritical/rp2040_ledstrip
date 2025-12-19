@@ -61,7 +61,7 @@ class LedStrip:
         self.pio_show = self._pio.show
 
     def __str__(self):
-        return f"sm: {self._pio}, lock: {self._lock.locked()}, user: {self._user}"
+        return f"sm: {self._pio}, pixels: {self._numpixels}, lock: {self._lock.locked()}, user: {self._user.__class__.__name__}"
 
     @property
     def buf(self) -> array.array:

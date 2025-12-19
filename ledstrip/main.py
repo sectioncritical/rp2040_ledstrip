@@ -29,29 +29,33 @@ class CmdStrips(CommandTemplate):
             console_writeln(f"{idx}: {str(strip)}")
 
 # create the led strip instances
-strip0 = ledstrip.LedStrip(0, 16, 144)
-strip1 = ledstrip.LedStrip(1, 19, 144)
+wing_strip = ledstrip.LedStrip(0, 16, 145)
+#strip1 = ledstrip.LedStrip(1, 19, 144)
 
 # create the command interface. all commands will be added to the ci
 ci = cmdif.CmdInterface()
 
 # create and add all the patterns used by this LED strip controller
-stripcmd = CmdStrips([strip0, strip1])
+stripcmd = CmdStrips([wing_strip])  # list of all strips
 ci.add_cmd("strips", stripcmd)
-range0 = LedRange(strip0)
-ci.add_cmd("range0", range0)
-range1 = LedRange(strip1)
-ci.add_cmd("range1", range1)
-random = LedRandom(strip0)
+range = LedRange(wing_strip)
+ci.add_cmd("range", range)
+#range1 = LedRange(strip1)
+#ci.add_cmd("range1", range1)
+random = LedRandom(wing_strip)
 ci.add_cmd("random", random)
-randomog = LedRandomOG(strip1)
-ci.add_cmd("randomog", randomog)
-leftturn = LedTurn(strip=strip0, start=0, stop=30)
+#randomog = LedRandomOG(strip1)
+#ci.add_cmd("randomog", randomog)
+leftturn = LedTurn(strip=wing_strip, start=30, stop=0)
 ci.add_cmd("left", leftturn)
-rightturn = LedTurn(strip=strip1, start=0, stop=30)
+rightturn = LedTurn(strip=wing_strip, start=144-30, stop=144)
 ci.add_cmd("right", rightturn)
-meter = LedMeter(strip0)
+meter = LedMeter(wing_strip)
 ci.add_cmd("meter", meter)
+brake = LedBrake(wing_strip)
+ci.add_cmd("brake", brake)
+brakehard = LedBrakeHard(wing_strip)
+ci.add_cmd("brakehard", brakehard)
 
 # start up command interface loop as main coroutine loop
 # it will dispatch commands as coroutine tasks
