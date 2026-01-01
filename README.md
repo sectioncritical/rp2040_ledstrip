@@ -38,9 +38,7 @@ We decided to use MicroPython instead of Adafruit's CircuitPython for reasons.
 
 License
 -------
-This project uses the [Zero-Clause BSD License](https://opensource.org/license/0bsd/).
-See the [LICENSE file](LICENSE.md) for actual license text. Basically, you can
-do whatever you want with this project but I am not responsible for anything.
+This source code is licensed under [AGPL v3](https://www.gnu.org/licenses/agpl-3.0.en.html).
 
 Issue Tracking
 --------------
