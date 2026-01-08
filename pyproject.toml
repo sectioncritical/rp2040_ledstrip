@@ -1,0 +1,20 @@
+[project]
+name = "rp2040-ledstrip"
+version = "0.1.0"
+description = "RGB strip blinky library for RP2040 micropython"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "AGPL-3.0-or-later"
+license-files = [ "LICENSE.txt" ]
+dependencies = [
+    "ghp-import>=2.1.0",
+    "linkchecker>=10.6.0",
+    "mkdocs-git-revision-date-localized-plugin>=1.5.0",
+    "mkdocs-material>=9.7.1",
+    "mkdocstrings-python>=2.0.1",
+    "mpremote>=1.27.0",
+    "pip-audit>=2.10.0",
+    "pydocstyle>=6.3.0",
+    "pylint>=4.0.4",
+    "pyserial>=3.5",
+]

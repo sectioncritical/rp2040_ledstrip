@@ -48,22 +48,12 @@ APP_FILES=console_std.py    \
           ledturn.py        \
           ledbrake.py
 
-SRC_DIR=ledstrip
 BUILD_DIR=build
-
-# micropython search path. needed for running unittest under upy
-UPYPATH=~/.micropython/lib:$(shell pwd)/$(SRC_DIR)
 
 all: help
 
-# venv management
-include python-venv.mak
-
 .PHONY: help
-help: this_help venv_help
-
-.PHONY: this_help
-this_help:
+help:
 	@echo ""
 	@echo "-------------"
 	@echo "Makefile help"
@@ -99,18 +89,26 @@ this_help:
 	@echo "docs-clean  - clean docs related build products"
 	@echo "gh-pages    - create gh-pages branch (no history)"
 	@echo ""
+	@echo "-------------"
+	@echo "VENV management"
+	@echo "-------------"
+	@echo "venv        - create python virtual environment (automatic when needed)"
+	@echo "cleanvenv   - clean the python venv"
+	@echo "audit       - run python package checker (automatic when needed)"
+	@echo "update      - update python package lock file"
+	@echo ""
 
 .PHONY: boards
-boards: |venv
-	@$(VENV)/bin/mpremote devs
+boards:
+	@uv run mpremote devs
 
 .PHONY: deploy
-deploy: | venv
-	@for f in $(APP_FILES); do $(VENV)/bin/mpremote cp $(SRC_DIR)/$$f :$$f; done
+deploy:
+	@for f in $(APP_FILES); do uv run mpremote cp $$f :$$f; done
 
 .PHONY: cleanpico
-cleanpico: | venv
-	@for f in $(APP_FILES); do $(VENV)/bin/mpremote rm :$$f; done
+cleanpico:
+	@for f in $(APP_FILES); do uv run mpremote rm :$$f; done
 
 $(BUILD_DIR):
 	mkdir $@
@@ -121,30 +119,30 @@ $(BUILD_DIR):
 deploy_mpy: $(APP_FILES) | venv $(BUILD_DIR)
 	for f in $(APP_FILES);                                                  \
 	do                                                                      \
-	    mpy-cross $(SRC_DIR)/$$f -o $(BUILD_DIR)/$${f%.py}.mpy;             \
-	    $(VENV)/bin/mpremote cp $(BUILD_DIR)/$${f%.py}.mpy :                   \
+	    mpy-cross $$f -o $(BUILD_DIR)/$${f%.py}.mpy;             \
+	    uv run mpremote cp $(BUILD_DIR)/$${f%.py}.mpy :                   \
 	done
 
 .PHONY: repl
-repl: |venv
-	$(VENV)/bin/mpremote repl
+repl:
+	uv run mpremote repl
 
 .PHONY: ls
-ls: |venv
-	$(VENV)/bin/mpremote ls
+ls:
+	uv run mpremote ls
 
 .PHONY: reset
-reset: |venv
-	$(VENV)/bin/mpremote reset
+reset:
+	uv run mpremote reset
 
 .PHONY: bootloader
-bootloader: |venv
-	$(VENV)/bin/mpremote bootloader
+bootloader:
+	uv run mpremote bootloader
 
 # make sure to set SERPORT to use terminal
 .PHONY: terminal
-terminal: venv
-	$(VENV)/bin/python -m serial.tools.miniterm $(SERPORT) 115200
+terminal:
+	uv run python -m serial.tools.miniterm $(SERPORT) 115200
 
 # runs unit tests from the tests/ directory
 # see that directory for more tests
@@ -157,25 +155,25 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 .PHONY: lint
-lint: |venv
-	$(VENV)/bin/pylint --rcfile=pylintrc --enable-all-extensions ledstrip
+lint:
+	uv run pylint --rcfile=pylintrc --enable-all-extensions ledstrip
 
 .PHONY: docstyle
-docstyle: |venv
-	$(VENV)/bin/pydocstyle ledstrip
+docstyle:
+	uv run pydocstyle ledstrip
 
 # DOCS RELATED TARGETS
 .PHONY: docs-build
-docs-build: |venv
-	$(VENV)/bin/mkdocs build
+docs-build:
+	uv run mkdocs build
 
 .PHONY: docs-serve
-docs-serve: |venv
-	$(VENV)/bin/mkdocs serve
+docs-serve:
+	uv run mkdocs serve
 
 .PHONY: gh-pages
-gh-pages: |venv
-	$(VENV)/bin/ghp-import -n -o site
+gh-pages:
+	uv run ghp-import -n -o site
 
 .PHONY: docs-clean
 docs-clean:
@@ -185,3 +183,25 @@ docs-clean:
 issues:
 	@echo ""
 	@git issue list -o "%T" -l "%i | %T| %D"
+
+########################################
+# PYTHON VIRTUAL ENVIRONMENT MAINTENANCE
+########################################
+
+.PHONY: venv
+venv:
+	uv sync --group dev
+	uv run pip-audit
+
+.PHONY: update
+update:
+	uv lock
+	uv run pip-audit
+
+.PHONY: cleanvenv
+cleanvenv:
+	rm -rf .venv
+
+.PHONY: audit
+audit:
+	uv run pip-audit
