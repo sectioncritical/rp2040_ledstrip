@@ -68,6 +68,10 @@ class LedStrip:
         """Get the pixel buffer array."""
         return self._buf
 
+    @property
+    def numpixels(self) -> int:
+        return self._numpixels
+
     async def acquire(self, newuser: CommandTemplate) -> None:
         """Acquire resource lock for the strip.
 
@@ -98,10 +102,27 @@ class LedStrip:
             self._buf[pix] = 0
         self.show()
 
-    def fill(self) -> None:
-        """Fill the LED strip with dim white (0x101010)."""
+    def fill_color(self, color: int) -> None:
+        """Fill the LED strip with the specified color.
+
+        The color is a 24-bit integer in RGB format. The caller should ensure
+        the channel color order is correct if the hardware is not RGB (such as
+        GRB instead).
+        """
         for pix in range(len(self._buf)):
-            self._buf[pix] = 0x101010
+            self._buf[pix] = color
+        self.show()
+
+    def fill_rgb(self, red: int, green: int, blue: int) -> None:
+        """Fill the LED strip with the specified color channel values.
+
+        Each color channel is a value 0-255. The hardware format is assumed to
+        be RGB. If the color channels are a different order the caller must
+        swap the necessary channel values prior to calling this function.
+        """
+        color = ((r & 0xFF) << 16) + ((g & 0xFF) << 8) + (b & 0xFF)
+        for pix in range(len(self._buf)):
+            self._buf[pix] = color
         self.show()
 
     def show(self) -> None:
